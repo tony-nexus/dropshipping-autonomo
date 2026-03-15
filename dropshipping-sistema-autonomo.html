@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Dropshipping Autônomo — Documentação Técnica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #080c14;
+  --bg2:       #0d1321;
+  --bg3:       #111827;
+  --bg4:       #1a2235;
+  --panel:     #141e30;
+  --border:    #1e2d45;
+  --border2:   #243350;
+  --accent:    #38bdf8;
+  --accent2:   #0ea5e9;
+  --green:     #34d399;
+  --green2:    #10b981;
+  --amber:     #fbbf24;
+  --amber2:    #f59e0b;
+  --purple:    #a78bfa;
+  --purple2:   #7c3aed;
+  --coral:     #fb7185;
+  --coral2:    #e11d48;
+  --teal:      #2dd4bf;
+  --text:      #e2e8f0;
+  --text2:     #94a3b8;
+  --text3:     #64748b;
+  --code-bg:   #090e1a;
+  --nav-w:     280px;
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ── Layout ────────────────────────────────────────────── */
+.layout { display: flex; min-height: 100vh; }
+
+/* ── Sidebar ───────────────────────────────────────────── */
+.sidebar {
+  width: var(--nav-w);
+  min-height: 100vh;
+  position: fixed;
+  top: 0; left: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-logo .sys-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.sidebar-logo h1 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+.sidebar-logo .version {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 6px;
+  font-family: var(--font-mono);
+}
+
+.nav-section { padding: 18px 0 8px 24px; }
+.nav-section-label {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 24px;
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 400;
+  transition: all .15s;
+  border-left: 2px solid transparent;
+  margin-left: -2px;
+}
+.nav-item:hover { color: var(--text); background: rgba(56,189,248,.05); border-left-color: var(--border2); }
+.nav-item.active { color: var(--accent); background: rgba(56,189,248,.08); border-left-color: var(--accent); font-weight: 500; }
+.nav-item .nav-badge {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: var(--border);
+  color: var(--text3);
+}
+.nav-item.active .nav-badge { background: rgba(56,189,248,.15); color: var(--accent); }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+}
+.sidebar-footer span { color: var(--green); }
+
+/* ── Main content ──────────────────────────────────────── */
+.main {
+  margin-left: var(--nav-w);
+  flex: 1;
+  max-width: 100%;
+}
+
+/* ── Hero ──────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  padding: 80px 72px 72px;
+  background: linear-gradient(135deg, #0a1628 0%, #0d1a2e 50%, #080e1c 100%);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -120px; right: -80px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(56,189,248,.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: 200px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(52,211,153,.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .2em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 32px; height: 1px;
+  background: var(--accent);
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+.hero .hero-sub {
+  font-size: 16px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
+.hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+.hero-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border2);
+  border-radius: 100px;
+  font-size: 12px;
+  color: var(--text2);
+  font-family: var(--font-mono);
+}
+.hero-pill .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+.hero-stats {
+  display: flex;
+  gap: 40px;
+}
+.hero-stat .val {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+}
+.hero-stat .lbl {
+  font-size: 12px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* ── Content area ──────────────────────────────────────── */
+.content { padding: 0 72px 80px; }
+
+/* ── Section ───────────────────────────────────────────── */
+.section {
+  padding-top: 64px;
+  border-top: 1px solid var(--border);
+  margin-top: 64px;
+  animation: fadeUp .5s ease both;
+}
+.section:first-child { border-top: none; margin-top: 0; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  background: rgba(56,189,248,.1);
+  border: 1px solid rgba(56,189,248,.2);
+  padding: 4px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  margin-top: 6px;
+}
+.section-header h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+.section-header p {
+  color: var(--text2);
+  margin-top: 6px;
+  font-size: 14px;
+  max-width: 600px;
+}
+
+h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 36px 0 14px;
+}
+h3.file-label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  padding: 8px 16px;
+  border-radius: 6px 6px 0 0;
+  margin: 28px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+h3.file-label::before {
+  content: '◆';
+  color: var(--accent);
+  font-size: 9px;
+}
+
+p { color: var(--text2); margin-bottom: 14px; line-height: 1.8; }
+
+/* ── Code blocks ───────────────────────────────────────── */
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 0 0 24px;
+  position: relative;
+}
+h3.file-label + pre {
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  margin-top: 0;
+}
+pre code {
+  display: block;
+  padding: 20px 24px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #cdd6f4;
+  white-space: pre;
+}
+.copy-btn {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text3);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  cursor: pointer;
+  transition: all .15s;
+  opacity: 0;
+}
+pre:hover .copy-btn { opacity: 1; }
+.copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+.copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+/* Syntax colors */
+.k  { color: #89b4fa; }   /* keyword */
+.s  { color: #a6e3a1; }   /* string */
+.c  { color: #45475a; }   /* comment */
+.f  { color: #89dceb; }   /* function */
+.n  { color: #f38ba8; }   /* number */
+.t  { color: #f9e2af; }   /* type */
+.p  { color: #cba6f7; }   /* property */
+
+/* ── Tables ────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; margin: 20px 0 28px; border-radius: 8px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: var(--bg3); }
+thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(56,189,248,.03); }
+td {
+  padding: 11px 16px;
+  font-size: 13.5px;
+  color: var(--text2);
+  vertical-align: top;
+}
+td:first-child { color: var(--text); font-weight: 500; }
+td code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(56,189,248,.08);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+/* ── Callouts ──────────────────────────────────────────── */
+.callout {
+  display: flex;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.callout-body { color: inherit; }
+.callout-body strong { font-weight: 600; display: block; margin-bottom: 2px; }
+.callout.info    { background: rgba(56,189,248,.06); border: 1px solid rgba(56,189,248,.15); color: #93c5fd; }
+.callout.warn    { background: rgba(251,191,36,.06); border: 1px solid rgba(251,191,36,.15); color: #fde68a; }
+.callout.danger  { background: rgba(251,113,133,.06); border: 1px solid rgba(251,113,133,.15); color: #fda4af; }
+.callout.success { background: rgba(52,211,153,.06); border: 1px solid rgba(52,211,153,.15); color: #6ee7b7; }
+
+/* ── Badges ────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.badge-blue   { background: rgba(56,189,248,.12); color: var(--accent);  border: 1px solid rgba(56,189,248,.2); }
+.badge-green  { background: rgba(52,211,153,.12); color: var(--green);   border: 1px solid rgba(52,211,153,.2); }
+.badge-amber  { background: rgba(251,191,36,.12); color: var(--amber);   border: 1px solid rgba(251,191,36,.2); }
+.badge-purple { background: rgba(167,139,250,.12); color: var(--purple); border: 1px solid rgba(167,139,250,.2); }
+.badge-coral  { background: rgba(251,113,133,.12); color: var(--coral);  border: 1px solid rgba(251,113,133,.2); }
+
+/* ── Step list ─────────────────────────────────────────── */
+.steps { list-style: none; display: flex; flex-direction: column; gap: 2px; margin: 16px 0 24px; }
+.steps li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 18px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.steps li .step-n {
+  width: 24px; height: 24px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(56,189,248,.12);
+  border: 1px solid rgba(56,189,248,.25);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.steps li .step-body { flex: 1; }
+.steps li .step-body strong { color: var(--text); font-size: 14px; display: block; margin-bottom: 3px; }
+.steps li .step-body span { color: var(--text2); font-size: 13px; }
+
+/* ── Module cards ──────────────────────────────────────── */
+.module-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin: 24px 0; }
+.module-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  transition: border-color .2s, transform .2s;
+  cursor: default;
+}
+.module-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.module-card .card-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.module-card h4 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.module-card p { font-size: 13px; color: var(--text2); margin: 0; }
+
+/* ── Env block ─────────────────────────────────────────── */
+.env-group { margin-bottom: 28px; }
+.env-group-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+}
+.env-group pre {
+  border-radius: 0 0 6px 6px;
+  margin-bottom: 0;
+}
+
+/* ── Flow diagram ──────────────────────────────────────── */
+.flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 24px 0;
+  padding: 20px 24px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  min-width: 120px;
+  text-align: center;
+}
+.flow-step .fs-icon { font-size: 20px; }
+.flow-step .fs-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: var(--font-display);
+}
+.flow-step .fs-sub {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+}
+.flow-arrow {
+  color: var(--border2);
+  font-size: 18px;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+/* ── Checklist ─────────────────────────────────────────── */
+.checklist { list-style: none; display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13.5px;
+  color: var(--text2);
+}
+.checklist li .chk {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  background: rgba(52,211,153,.12);
+  border: 1px solid rgba(52,211,153,.3);
+  color: var(--green);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  margin-top: 1px;
+}
+.checklist li .chk.warn { background: rgba(251,191,36,.12); border-color: rgba(251,191,36,.3); color: var(--amber); }
+.checklist li .chk.danger { background: rgba(251,113,133,.12); border-color: rgba(251,113,133,.3); color: var(--coral); }
+
+/* ── File tree ─────────────────────────────────────────── */
+.file-tree {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 2;
+  color: #6b7a90;
+  margin: 20px 0 28px;
+}
+.file-tree .dir { color: var(--accent); }
+.file-tree .file { color: #8899aa; }
+.file-tree .comment { color: #3d5066; font-style: italic; }
+
+/* ── Print / TOC ───────────────────────────────────────── */
+.toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 20px 0 28px; }
+.toc-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text2);
+  font-size: 13px;
+  transition: all .15s;
+}
+.toc-item:hover { color: var(--accent); border-color: var(--border2); background: rgba(56,189,248,.04); }
+.toc-item .ti-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent);
+  background: rgba(56,189,248,.1);
+  padding: 1px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+/* ── Divider ───────────────────────────────────────────── */
+.divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+/* ── Progress bar visual ───────────────────────────────── */
+.module-progress {
+  display: flex;
+  gap: 4px;
+  margin: 12px 0 24px;
+}
+.mp-step {
+  height: 4px;
+  flex: 1;
+  background: var(--border);
+  border-radius: 2px;
+  transition: background .3s;
+}
+.mp-step.done { background: var(--green); }
+.mp-step.active { background: var(--accent); }
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .sidebar { transform: translateX(-100%); transition: transform .3s; }
+  .sidebar.open { transform: none; }
+  .main { margin-left: 0; }
+  .hero, .content { padding-left: 32px; padding-right: 32px; }
+  .toc-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Antigravity special block ─────────────────────────── */
+.ag-block {
+  background: linear-gradient(135deg, rgba(124,58,237,.08) 0%, rgba(56,189,248,.05) 100%);
+  border: 1px solid rgba(124,58,237,.25);
+  border-radius: 10px;
+  padding: 24px;
+  margin: 20px 0;
+}
+.ag-block .ag-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--purple);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ag-block .ag-title::before { content: '◈'; }
+
+/* ── Mobile toggle ─────────────────────────────────────── */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  bottom: 24px; right: 24px;
+  z-index: 200;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(56,189,248,.4);
+}
+@media (max-width:1024px) { .menu-toggle { display: flex; align-items:center; justify-content:center; } }
+</style>
+</head>
+<body>
+
+<!-- ── Sidebar ──────────────────────────────────────────────────── -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sys-tag">◆ Documentação Técnica</div>
+    <h1>Sistema Dropshipping Autônomo</h1>
+    <div class="version">v1.0 · Antigravity Ready</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Visão Geral</div>
+    <a href="#intro" class="nav-item active">Introdução <span class="nav-badge">overview</span></a>
+    <a href="#arquitetura" class="nav-item">Arquitetura</a>
+    <a href="#estrutura" class="nav-item">Estrutura de Arquivos</a>
+    <a href="#env" class="nav-item">Variáveis de Ambiente</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Módulos</div>
+    <a href="#m1" class="nav-item">M1 · Onboarding <span class="nav-badge">config</span></a>
+    <a href="#m2" class="nav-item">M2 · Sourcing <span class="nav-badge">worker</span></a>
+    <a href="#m3" class="nav-item">M3 · E-commerce <span class="nav-badge">frontend</span></a>
+    <a href="#m4" class="nav-item">M4 · Pagamentos <span class="nav-badge">brasil</span></a>
+    <a href="#m5" class="nav-item">M5 · Fulfillment <span class="nav-badge">auto</span></a>
+    <a href="#m6" class="nav-item">M6 · Supabase DB <span class="nav-badge">sql</span></a>
+    <a href="#m7" class="nav-item">M7 · API Gateway <span class="nav-badge">infra</span></a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Deploy & Ops</div>
+    <a href="#deploy" class="nav-item">Guia de Deploy</a>
+    <a href="#antigravity" class="nav-item">Antigravity Rules</a>
+    <a href="#lgpd" class="nav-item">LGPD & Segurança</a>
+  </div>
+
+  <div class="sidebar-footer">
+    Stack: <span>Next.js 14 · Supabase · TypeScript</span>
+  </div>
+</nav>
+
+<!-- ── Main ──────────────────────────────────────────────────────── -->
+<div class="main">
+
+<!-- Hero -->
+<header class="hero" id="intro">
+  <div class="hero-eyebrow">Antigravity · Google · Sistema Completo</div>
+  <h1>Dropshipping<br><em>100% Autônomo</em></h1>
+  <p class="hero-sub">Documentação técnica completa — do schema SQL ao deploy em produção. Todos os 7 módulos, código, configurações e arquivos de contexto para o Antigravity construir do zero.</p>
+  <div class="hero-pills">
+    <div class="hero-pill"><span class="dot"></span>Next.js 14 App Router</div>
+    <div class="hero-pill"><span class="dot"></span>Supabase BaaS</div>
+    <div class="hero-pill"><span class="dot"></span>Mercado Pago · Pix</div>
+    <div class="hero-pill"><span class="dot"></span>AliExpress · CJ Dropshipping</div>
+    <div class="hero-pill"><span class="dot"></span>Correios · Melhor Envio</div>
+    <div class="hero-pill"><span class="dot"></span>Focus NFe · LGPD</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="val">7</div><div class="lbl">Módulos</div></div>
+    <div class="hero-stat"><div class="val">6</div><div class="lbl">Tabelas SQL</div></div>
+    <div class="hero-stat"><div class="val">100%</div><div class="lbl">Autônomo</div></div>
+    <div class="hero-stat"><div class="val">BR</div><div class="lbl">Otimizado</div></div>
+  </div>
+</header>
+
+<!-- Content -->
+<div class="content">
+
+<!-- ──────────────────────── SUMÁRIO ──────────────────────────── -->
+<div class="section" id="toc" style="padding-top:48px; margin-top:48px;">
+  <div class="section-header">
+    <div>
+      <h2>Sumário de Conteúdo</h2>
+      <p>Clique em qualquer seção para navegar diretamente.</p>
+    </div>
+  </div>
+  <div class="toc-grid">
+    <a href="#arquitetura" class="toc-item"><span class="ti-num">01</span>Visão Geral da Arquitetura</a>
+    <a href="#estrutura" class="toc-item"><span class="ti-num">02</span>Estrutura de Arquivos</a>
+    <a href="#env" class="toc-item"><span class="ti-num">03</span>Variáveis de Ambiente</a>
+    <a href="#m1" class="toc-item"><span class="ti-num">M1</span>Onboarding e Configuração Inicial</a>
+    <a href="#m2" class="toc-item"><span class="ti-num">M2</span>Motor de Automação e Sourcing</a>
+    <a href="#m3" class="toc-item"><span class="ti-num">M3</span>E-commerce Frontend</a>
+    <a href="#m4" class="toc-item"><span class="ti-num">M4</span>Pagamentos e Webhooks (Brasil)</a>
+    <a href="#m5" class="toc-item"><span class="ti-num">M5</span>Fulfillment Autônomo</a>
+    <a href="#m6" class="toc-item"><span class="ti-num">M6</span>Supabase — Schema e RLS</a>
+    <a href="#m7" class="toc-item"><span class="ti-num">M7</span>API Gateway Centralizado</a>
+    <a href="#deploy" class="toc-item"><span class="ti-num">08</span>Guia de Deploy e Produção</a>
+    <a href="#antigravity" class="toc-item"><span class="ti-num">AG</span>Antigravity Rules e Workflows</a>
+  </div>
+</div>
+
+<!-- ──────────────────────── ARQUITETURA ──────────────────────── -->
+<div class="section" id="arquitetura">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <div>
+      <h2>Visão Geral da Arquitetura</h2>
+      <p>Padrão Amazon/eBay — API Gateway centralizado, BaaS Supabase e workers assíncronos.</p>
+    </div>
+  </div>
+
+  <p>O sistema é composto por 7 módulos que operam de forma integrada. A arquitetura segue o padrão de grandes marketplaces: <strong style="color:var(--text)">único ponto de entrada</strong> via API Gateway, banco de dados isolado por tenant via RLS, e automação completa do ciclo de vida do produto sem intervenção humana.</p>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="fs-icon">🏪</div>
+      <div class="fs-label">Loja</div>
+      <div class="fs-sub">Next.js 14</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="fs-icon">🔀</div>
+      <div class="fs-label">API Gateway</div>
+      <div class="fs-sub">Middleware</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="fs-icon">💳</div>
+      <div class="fs-label">Pagamento</div>
+      <div class="fs-sub">Pix · Cartão · Boleto</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="fs-icon">⚡</div>
+      <div class="fs-label">Fulfillment</div>
+      <div class="fs-sub">Auto</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="fs-icon">📦</div>
+      <div class="fs-label">Fornecedor</div>
+      <div class="fs-sub">AliExpress · CJ</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="fs-icon">🚚</div>
+      <div class="fs-label">Rastreio</div>
+      <div class="fs-sub">Correios</div>
+    </div>
+  </div>
+
+  <h3>Stack Tecnológico</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Camada</th><th>Tecnologia</th><th>Função</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend / Admin</td><td><code>Next.js 14 App Router + TypeScript</code></td><td>Loja de vendas e painel administrativo</td></tr>
+        <tr><td>API Gateway</td><td><code>Next.js Middleware + Upstash Redis</code></td><td>Auth JWT, rate limiting, CORS, logging</td></tr>
+        <tr><td>Backend BaaS</td><td><code>Supabase (PostgreSQL + Auth + Storage)</code></td><td>Banco, autenticação, RLS, arquivos</td></tr>
+        <tr><td>Workers</td><td><code>Edge Functions + pg_cron + pg_net</code></td><td>Automação sourcing e sincronização</td></tr>
+        <tr><td>Pagamentos</td><td><code>Mercado Pago / Pagar.me</code></td><td>Pix, Cartão parcelado, Boleto</td></tr>
+        <tr><td>Logística</td><td><code>Correios API + Melhor Envio</code></td><td>Cálculo de frete e rastreamento</td></tr>
+        <tr><td>Notificações</td><td><code>Resend (Email) + Twilio (WhatsApp)</code></td><td>Comunicação automática com cliente</td></tr>
+        <tr><td>Nota Fiscal</td><td><code>Focus NFe / eNotas</code></td><td>Emissão automática de NF-e</td></tr>
+        <tr><td>Observabilidade</td><td><code>Sentry + Supabase Logs</code></td><td>Monitoramento de erros e performance</td></tr>
+        <tr><td>Deploy</td><td><code>Vercel (frontend) + Railway (workers)</code></td><td>Infraestrutura escalável serverless</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="module-grid">
+    <div class="module-card"><div class="card-tag">M1 · Config</div><h4>Onboarding</h4><p>Wizard 3 etapas captura preferências do admin e ativa os robôs automaticamente.</p></div>
+    <div class="module-card"><div class="card-tag">M2 · Worker</div><h4>Sourcing Engine</h4><p>Workers buscam, traduzem, precificam e publicam produtos a cada 6h.</p></div>
+    <div class="module-card"><div class="card-tag">M3 · Frontend</div><h4>E-commerce</h4><p>Loja SSR com catálogo, carrinho Zustand e checkout com frete em tempo real.</p></div>
+    <div class="module-card"><div class="card-tag">M4 · Pagamento</div><h4>Payments BR</h4><p>Pix instantâneo, cartão parcelado, boleto — webhooks autenticados com HMAC.</p></div>
+    <div class="module-card"><div class="card-tag">M5 · Auto</div><h4>Fulfillment</h4><p>Pedido no fornecedor, captura rastreio e notifica cliente sem intervenção.</p></div>
+    <div class="module-card"><div class="card-tag">M6 · DB</div><h4>Supabase Schema</h4><p>6 tabelas, enums, triggers, índices GIN e RLS isolando dados por loja.</p></div>
+    <div class="module-card"><div class="card-tag">M7 · Infra</div><h4>API Gateway</h4><p>Rate limiting, auth JWT, CORS, logging estruturado — único ponto de entrada.</p></div>
+  </div>
+</div>
+
+<!-- ──────────────────────── ESTRUTURA ────────────────────────── -->
+<div class="section" id="estrutura">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <div><h2>Estrutura de Arquivos do Projeto</h2><p>Árvoredo completo — crie esta estrutura antes de iniciar.</p></div>
+  </div>
+  <div class="file-tree">
+<span class="dir">/</span>
+├── <span class="dir">.antigravity/</span>
+│   ├── <span class="file">rules.md</span>              <span class="comment">← Regras do agente Antigravity</span>
+│   └── <span class="dir">workflows/</span>
+│       ├── <span class="file">new-module.md</span>     <span class="comment">← Workflow para novo módulo</span>
+│       └── <span class="file">add-supplier.md</span>  <span class="comment">← Workflow para novo fornecedor</span>
+├── <span class="dir">app/</span>
+│   ├── <span class="dir">(store)/</span>              <span class="comment">← Loja pública (M3)</span>
+│   │   ├── <span class="file">page.tsx</span>          <span class="comment">← Homepage produtos em destaque</span>
+│   │   ├── <span class="dir">produtos/[slug]/</span>  <span class="comment">← Detalhe do produto (SSR + SEO)</span>
+│   │   ├── <span class="dir">carrinho/</span>
+│   │   └── <span class="dir">checkout/</span>
+│   ├── <span class="dir">(admin)/</span>              <span class="comment">← Painel administrativo</span>
+│   │   ├── <span class="dir">onboarding/</span>       <span class="comment">← Wizard primeiro login (M1)</span>
+│   │   ├── <span class="dir">dashboard/</span>
+│   │   ├── <span class="dir">produtos/</span>
+│   │   ├── <span class="dir">pedidos/</span>
+│   │   └── <span class="dir">configuracoes/</span>
+│   └── <span class="dir">api/</span>
+│       ├── <span class="dir">gateway/[...path]/</span>  <span class="comment">← API Gateway curinga (M7)</span>
+│       ├── <span class="dir">admin/onboarding/complete/</span>
+│       ├── <span class="dir">admin/sourcing/trigger/</span>
+│       ├── <span class="dir">checkout/session/</span>
+│       └── <span class="dir">webhooks/</span>
+│           ├── <span class="file">payment/route.ts</span>  <span class="comment">← Webhook HMAC (M4)</span>
+│           └── <span class="file">tracking/route.ts</span>
+├── <span class="dir">workers/</span>
+│   ├── <span class="dir">sourcing/</span>
+│   │   ├── <span class="file">index.ts</span>            <span class="comment">← Orquestrador (M2)</span>
+│   │   ├── <span class="dir">suppliers/</span>
+│   │   │   ├── <span class="file">base.ts</span>           <span class="comment">← Interface ISupplierAdapter</span>
+│   │   │   ├── <span class="file">aliexpress.ts</span>
+│   │   │   └── <span class="file">cj-dropshipping.ts</span>
+│   │   └── <span class="dir">processors/</span>
+│   │       ├── <span class="file">content.ts</span>        <span class="comment">← Tradução + SEO</span>
+│   │       ├── <span class="file">images.ts</span>         <span class="comment">← Storage Supabase</span>
+│   │       └── <span class="file">slug.ts</span>
+│   └── <span class="dir">fulfillment/</span>
+│       ├── <span class="file">index.ts</span>            <span class="comment">← Orquestrador (M5)</span>
+│       ├── <span class="file">purchase.ts</span>         <span class="comment">← Compra no fornecedor</span>
+│       └── <span class="file">tracking.ts</span>         <span class="comment">← Captura rastreamento</span>
+├── <span class="dir">lib/</span>
+│   ├── <span class="file">pricing.ts</span>              <span class="comment">← Calculadora de preços</span>
+│   ├── <span class="file">gateway-router.ts</span>
+│   ├── <span class="dir">payment/</span>              <span class="comment">← mercadopago.ts · pagarme.ts</span>
+│   ├── <span class="dir">shipping/</span>             <span class="comment">← correios.ts · melhor-envio.ts</span>
+│   ├── <span class="dir">nfe/</span>                  <span class="comment">← focusnfe.ts</span>
+│   └── <span class="dir">notifications/</span>        <span class="comment">← email.ts · whatsapp.ts</span>
+├── <span class="dir">hooks/</span>
+│   ├── <span class="file">useOnboarding.ts</span>        <span class="comment">← Wizard M1</span>
+│   ├── <span class="file">useCart.ts</span>              <span class="comment">← Zustand persist</span>
+│   └── <span class="file">useCheckout.ts</span>
+├── <span class="dir">supabase/migrations/</span>
+│   ├── <span class="file">001_initial_schema.sql</span>
+│   ├── <span class="file">002_row_level_security.sql</span>
+│   ├── <span class="file">003_cron_jobs.sql</span>
+│   └── <span class="file">004_storage_policies.sql</span>
+├── <span class="file">middleware.ts</span>               <span class="comment">← API Gateway entry point</span>
+├── <span class="file">.env.local</span>                  <span class="comment">← NÃO commitar</span>
+└── <span class="file">CONTEXT.md</span>                  <span class="comment">← Contexto para agentes IA</span>
+  </div>
+</div>
+
+<!-- ──────────────────────── ENV VARS ─────────────────────────── -->
+<div class="section" id="env">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <div><h2>Variáveis de Ambiente</h2><p>Configurar no <code>.env.local</code> local e nas plataformas de deploy (Vercel / Railway).</p></div>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-icon">🔒</div>
+    <div class="callout-body"><strong>Segurança crítica</strong>Nunca commite o <code>.env.local</code>. Variáveis <code>NEXT_PUBLIC_</code> ficam expostas no browser — use APENAS para chaves públicas. <code>SUPABASE_SERVICE_ROLE_KEY</code> nunca deve aparecer em código client-side.</div>
+  </div>
+
+  <div class="env-group">
+    <div class="env-group-label"># SUPABASE (obrigatório)</div>
+    <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code>NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...  # NUNCA no frontend</code></pre>
+  </div>
+
+  <div class="env-group">
+    <div class="env-group-label"># PAGAMENTOS BRASIL</div>
+    <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code>MERCADOPAGO_ACCESS_TOKEN=APP_USR-xxxxxxxxxxxxxxxxxxxx
+MERCADOPAGO_PUBLIC_KEY=APP_USR-xxxxxxxxxxxxxxxxxxxx
+MERCADOPAGO_WEBHOOK_SECRET=seu_webhook_secret_aqui
+# Alternativa: Pagar.me
+PAGARME_API_KEY=ak_live_xxxxxxxxxxxxxxxx
+PAGARME_WEBHOOK_SECRET=seu_webhook_secret_pagarme</code></pre>
+  </div>
+
+  <div class="env-group">
+    <div class="env-group-label"># FORNECEDORES</div>
+    <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code>ALIEXPRESS_APP_KEY=seu_app_key
+ALIEXPRESS_APP_SECRET=seu_app_secret
+CJ_API_KEY=seu_cj_api_key
+CJ_EMAIL=email@suaempresa.com</code></pre>
+  </div>
+
+  <div class="env-group">
+    <div class="env-group-label"># LOGÍSTICA</div>
+    <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code>CORREIOS_USER=seu_usuario_correios
+CORREIOS_PASSWORD=sua_senha_correios
+CORREIOS_CEP_ORIGEM=01310100
+MELHOR_ENVIO_TOKEN=seu_token_melhor_envio</code></pre>
+  </div>
+
+  <div class="env-group">
+    <div class="env-group-label"># NOTA FISCAL</div>
+    <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code>FOCUSNFE_TOKEN=seu_token_focusnfe
+FOCUSNFE_AMBIENTE=producao   # ou homologacao
+CNPJ_EMITENTE=00000000000000</code></pre>
+  </div>
+
+  <div class="env-group">
+    <div class="env-group-label"># NOTIFICAÇÕES + WORKERS</div>
+    <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code>RESEND_API_KEY=re_xxxxxxxxxxxxxxxx
+TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxx
+TWILIO_AUTH_TOKEN=seu_auth_token
+TWILIO_WHATSAPP_FROM=whatsapp:+14155238886
+DEEPL_API_KEY=sua_chave_deepl              # opcional — tradução automática
+WORKER_SECRET_KEY=string_aleatoria_min_64_chars_NUNCA_expor
+INTERNAL_WORKER_URL=https://seu-dominio.com
+UPSTASH_REDIS_REST_URL=https://...upstash.io
+UPSTASH_REDIS_REST_TOKEN=AXxxxxxxxxxx
+SENTRY_DSN=https://...@sentry.io/...
+NEXT_PUBLIC_APP_URL=https://seu-dominio.com</code></pre>
+  </div>
+</div>
+
+<!-- ──────────────────────── MÓDULO 1 ─────────────────────────── -->
+<div class="section" id="m1">
+  <div class="section-header">
+    <span class="section-num">M1</span>
+    <div>
+      <h2>Onboarding e Configuração Inicial</h2>
+      <p>Wizard 3 etapas · primeiro login · ativa os robôs automaticamente.</p>
+    </div>
+  </div>
+
+  <div class="module-progress">
+    <div class="mp-step done"></div><div class="mp-step done"></div>
+    <div class="mp-step done"></div><div class="mp-step"></div>
+    <div class="mp-step"></div><div class="mp-step"></div><div class="mp-step"></div>
+  </div>
+
+  <p>O wizard captura todas as preferências do admin em <strong style="color:var(--text)">3 etapas</strong>. Cada etapa persiste incrementalmente via <code>upsert</code> no Supabase — o progresso nunca se perde se o usuário fechar o browser. Ao completar a etapa 3, o sistema dispara automaticamente o primeiro job de sourcing.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Etapa</th><th>Campos</th><th>Persistência</th></tr></thead>
+      <tbody>
+        <tr><td>1 — Dados da Loja</td><td>Nome, logo, cor primária, domínio</td><td><code>configuracoes_gerais</code> (upsert)</td></tr>
+        <tr><td>2 — Sourcing & Margem</td><td>Categorias, keywords, preço min/max, margem %, max produtos/dia</td><td><code>configuracoes_gerais</code> (upsert)</td></tr>
+        <tr><td>3 — Gateways & Envio</td><td>Credenciais gateway, transportadoras, frete grátis, NF-e, CNPJ</td><td>API route segura (service_role)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="file-label">hooks/useOnboarding.ts</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">import</span> { useState, useCallback } <span class="k">from</span> <span class="s">'react'</span>
+<span class="k">import</span> { createClientComponentClient } <span class="k">from</span> <span class="s">'@supabase/auth-helpers-nextjs'</span>
+<span class="k">import</span> { useRouter } <span class="k">from</span> <span class="s">'next/navigation'</span>
+
+<span class="k">export type</span> <span class="t">OnboardingStep</span> =
+  | <span class="s">'store_info'</span> | <span class="s">'sourcing_preferences'</span> | <span class="s">'gateways_shipping'</span> | <span class="s">'completed'</span>
+
+<span class="k">export interface</span> <span class="t">OnboardingState</span> {
+  <span class="c">// Etapa 1 — Dados da loja</span>
+  nomeLoja: <span class="t">string</span>; logoUrl: <span class="t">string</span> | <span class="t">null</span>; corPrimaria: <span class="t">string</span>
+  <span class="c">// Etapa 2 — Sourcing & Margem</span>
+  categoriasInteresse: <span class="t">string</span>[]; palavrasChave: <span class="t">string</span>[]
+  precoCustoMin: <span class="t">number</span>; precoCustoMax: <span class="t">number</span>
+  margemLucroPct: <span class="t">number</span>; maxProdutosDia: <span class="t">number</span>; autoPublish: <span class="t">boolean</span>
+  <span class="c">// Etapa 3 — Gateways & Envio</span>
+  gatewayPagamento: <span class="s">'mercadopago'</span> | <span class="s">'pagarme'</span>
+  gatewayAccessToken: <span class="t">string</span>; gatewayPublicKey: <span class="t">string</span>
+  transportadoras: <span class="t">string</span>[]; freteGratisAcima: <span class="t">number</span> | <span class="t">null</span>
+  nfeProvider: <span class="s">'focusnfe'</span> | <span class="s">'enotas'</span>; nfeToken: <span class="t">string</span>; cnpjEmitente: <span class="t">string</span>
+}
+
+<span class="k">const</span> STEPS: <span class="t">OnboardingStep</span>[] = [
+  <span class="s">'store_info'</span>, <span class="s">'sourcing_preferences'</span>, <span class="s">'gateways_shipping'</span>, <span class="s">'completed'</span>
+]
+
+<span class="k">export function</span> <span class="f">useOnboarding</span>() {
+  <span class="k">const</span> supabase = <span class="f">createClientComponentClient</span>()
+  <span class="k">const</span> router = <span class="f">useRouter</span>()
+  <span class="k">const</span> [currentStep, setCurrentStep] = <span class="f">useState</span>&lt;<span class="t">OnboardingStep</span>&gt;(<span class="s">'store_info'</span>)
+  <span class="k">const</span> [state, setState] = <span class="f">useState</span>&lt;<span class="t">OnboardingState</span>&gt;(INITIAL_STATE)
+  <span class="k">const</span> [loading, setLoading] = <span class="f">useState</span>(<span class="k">false</span>)
+  <span class="k">const</span> [error, setError] = <span class="f">useState</span>&lt;<span class="t">string</span> | <span class="t">null</span>&gt;(<span class="k">null</span>)
+
+  <span class="k">const</span> advanceStep = <span class="f">useCallback</span>(<span class="k">async</span> () => {
+    <span class="f">setLoading</span>(<span class="k">true</span>)
+    <span class="k">const</span> { data: { user } } = <span class="k">await</span> supabase.auth.<span class="f">getUser</span>()
+    <span class="k">const</span> { data: admin } = <span class="k">await</span> supabase
+      .from(<span class="s">'administrador'</span>).<span class="f">select</span>(<span class="s">'id'</span>).<span class="f">eq</span>(<span class="s">'user_id'</span>, user!.id).<span class="f">single</span>()
+
+    <span class="c">// Persiste progresso atual antes de avançar</span>
+    <span class="k">await</span> supabase.from(<span class="s">'configuracoes_gerais'</span>).<span class="f">upsert</span>({
+      admin_id: admin!.id, ...<span class="f">mapStateToDb</span>(state),
+      updated_at: <span class="k">new</span> <span class="t">Date</span>().<span class="f">toISOString</span>()
+    }, { onConflict: <span class="s">'admin_id'</span> })
+
+    <span class="k">const</span> idx = STEPS.<span class="f">indexOf</span>(currentStep)
+    <span class="f">setCurrentStep</span>(STEPS[idx + <span class="n">1</span>])
+    <span class="f">setLoading</span>(<span class="k">false</span>)
+  }, [currentStep, state, supabase])
+
+  <span class="k">const</span> completeOnboarding = <span class="f">useCallback</span>(<span class="k">async</span> () => {
+    <span class="f">setLoading</span>(<span class="k">true</span>)
+    <span class="c">// Credenciais via API route segura — usa SERVICE_ROLE_KEY server-side</span>
+    <span class="k">const</span> res = <span class="k">await</span> <span class="f">fetch</span>(<span class="s">'/api/admin/onboarding/complete'</span>, {
+      method: <span class="s">'POST'</span>, headers: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> },
+      body: <span class="t">JSON</span>.<span class="f">stringify</span>({ adminId: admin!.id, config: state })
+    })
+    <span class="k">if</span> (res.ok) {
+      <span class="k">await</span> supabase.from(<span class="s">'administrador'</span>)
+        .<span class="f">update</span>({ onboarding_ok: <span class="k">true</span> }).<span class="f">eq</span>(<span class="s">'id'</span>, admin!.id)
+      router.<span class="f">push</span>(<span class="s">'/admin/dashboard'</span>)
+    }
+    <span class="f">setLoading</span>(<span class="k">false</span>)
+  }, [state, supabase, router])
+
+  <span class="k">return</span> { currentStep, stepIndex: STEPS.<span class="f">indexOf</span>(currentStep),
+           totalSteps: <span class="n">3</span>, state, loading, error,
+           updateState: (p: <span class="t">Partial</span>&lt;<span class="t">OnboardingState</span>&gt;) => <span class="f">setState</span>(s => ({...s, ...p})),
+           advanceStep, completeOnboarding }
+}</code></pre>
+
+  <h3 class="file-label">app/api/admin/onboarding/complete/route.ts</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">import</span> { NextRequest, NextResponse } <span class="k">from</span> <span class="s">'next/server'</span>
+<span class="k">import</span> { createRouteHandlerClient } <span class="k">from</span> <span class="s">'@supabase/auth-helpers-nextjs'</span>
+<span class="k">import</span> { createClient } <span class="k">from</span> <span class="s">'@supabase/supabase-js'</span>
+<span class="k">import</span> { z } <span class="k">from</span> <span class="s">'zod'</span>
+<span class="k">import</span> { cookies } <span class="k">from</span> <span class="s">'next/headers'</span>
+
+<span class="c">// Cliente privilegiado — server-side ONLY, nunca expor no frontend</span>
+<span class="k">const</span> supabaseAdmin = <span class="f">createClient</span>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+<span class="k">const</span> Schema = z.<span class="f">object</span>({
+  adminId: z.<span class="f">string</span>().<span class="f">uuid</span>(),
+  config: z.<span class="f">object</span>({
+    nomeLoja:           z.<span class="f">string</span>().<span class="f">min</span>(<span class="n">2</span>).<span class="f">max</span>(<span class="n">100</span>),
+    margemLucroPct:     z.<span class="f">number</span>().<span class="f">min</span>(<span class="n">5</span>).<span class="f">max</span>(<span class="n">500</span>),
+    gatewayAccessToken: z.<span class="f">string</span>().<span class="f">min</span>(<span class="n">10</span>),
+    cnpjEmitente:       z.<span class="f">string</span>().<span class="f">regex</span>(<span class="s">/^\d{14}$/</span>),
+    <span class="c">// ... demais campos validados</span>
+  })
+})
+
+<span class="k">export async function</span> <span class="f">POST</span>(req: <span class="t">NextRequest</span>) {
+  <span class="k">const</span> supabase = <span class="f">createRouteHandlerClient</span>({ cookies })
+  <span class="k">const</span> { data: { session } } = <span class="k">await</span> supabase.auth.<span class="f">getSession</span>()
+  <span class="k">if</span> (!session) <span class="k">return</span> NextResponse.<span class="f">json</span>({ error: <span class="s">'Não autenticado'</span> }, { status: <span class="n">401</span> })
+
+  <span class="k">const</span> parsed = Schema.<span class="f">safeParse</span>(<span class="k">await</span> req.<span class="f">json</span>())
+  <span class="k">if</span> (!parsed.success)
+    <span class="k">return</span> NextResponse.<span class="f">json</span>({ error: <span class="s">'Dados inválidos'</span>, details: parsed.error.<span class="f">flatten</span>() }, { status: <span class="n">400</span> })
+
+  <span class="c">// Garante que adminId pertence ao usuário autenticado</span>
+  <span class="k">const</span> { data: admin } = <span class="k">await</span> supabaseAdmin
+    .from(<span class="s">'administrador'</span>).<span class="f">select</span>(<span class="s">'id'</span>)
+    .<span class="f">eq</span>(<span class="s">'id'</span>, parsed.data.adminId).<span class="f">eq</span>(<span class="s">'user_id'</span>, session.user.id).<span class="f">single</span>()
+  <span class="k">if</span> (!admin) <span class="k">return</span> NextResponse.<span class="f">json</span>({ error: <span class="s">'Acesso negado'</span> }, { status: <span class="n">403</span> })
+
+  <span class="k">await</span> supabaseAdmin.from(<span class="s">'configuracoes_gerais'</span>).<span class="f">upsert</span>({
+    admin_id: parsed.data.adminId,
+    ...<span class="f">mapConfigToDb</span>(parsed.data.config),
+  }, { onConflict: <span class="s">'admin_id'</span> })
+
+  <span class="c">// Dispara primeiro job de sourcing (fire-and-forget)</span>
+  <span class="f">fetch</span>(`${process.env.INTERNAL_WORKER_URL}/api/admin/sourcing/trigger`, {
+    method: <span class="s">'POST'</span>,
+    headers: { Authorization: `Bearer ${process.env.WORKER_SECRET_KEY}` },
+    body: <span class="t">JSON</span>.<span class="f">stringify</span>({ adminId: parsed.data.adminId, trigger: <span class="s">'onboarding_complete'</span> })
+  }).<span class="f">catch</span>(() => {})
+
+  <span class="k">return</span> NextResponse.<span class="f">json</span>({ success: <span class="k">true</span> })
+}</code></pre>
+</div>
+
+<!-- ──────────────────────── MÓDULO 2 ─────────────────────────── -->
+<div class="section" id="m2">
+  <div class="section-header">
+    <span class="section-num">M2</span>
+    <div><h2>Motor de Automação e Sourcing</h2><p>Workers assíncronos · AliExpress · CJ Dropshipping · pg_cron.</p></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">⚙️</div>
+    <div class="callout-body"><strong>Ciclo de execução</strong>O worker roda a cada 6h via <code>pg_cron</code>. Para cada keyword configurada, busca produtos na API do fornecedor, filtra, traduz, precifica e insere na tabela <code>produtos</code> com <code>status = 'active'</code>.</div>
+  </div>
+
+  <h3 class="file-label">workers/sourcing/suppliers/base.ts — Contrato base</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">export interface</span> <span class="t">RawSupplierProduct</span> {
+  externalId: <span class="t">string</span>;  title: <span class="t">string</span>;  description: <span class="t">string</span>
+  images: <span class="t">string</span>[];   price: <span class="t">number</span>;  currency: <span class="t">string</span>
+  stock: <span class="t">number</span>;      weight: <span class="t">number</span> | <span class="t">null</span>;  shippingTime: <span class="t">string</span> | <span class="t">null</span>
+  category: <span class="t">string</span>;  supplierName: <span class="t">string</span>;  supplierUrl: <span class="t">string</span>
+  variants: <span class="t">RawVariant</span>[];  rating: <span class="t">number</span> | <span class="t">null</span>;  reviewCount: <span class="t">number</span> | <span class="t">null</span>
+}
+
+<span class="k">export interface</span> <span class="t">ISupplierAdapter</span> {
+  name: <span class="t">string</span>
+  <span class="f">search</span>(params: <span class="t">SearchParams</span>): <span class="t">Promise</span>&lt;<span class="t">RawSupplierProduct</span>[]&gt;
+  <span class="f">getProduct</span>(externalId: <span class="t">string</span>): <span class="t">Promise</span>&lt;<span class="t">RawSupplierProduct</span> | <span class="t">null</span>&gt;
+  <span class="f">getStock</span>(externalIds: <span class="t">string</span>[]): <span class="t">Promise</span>&lt;<span class="t">Record</span>&lt;<span class="t">string</span>, <span class="t">number</span>&gt;&gt;
+}</code></pre>
+
+  <h3 class="file-label">workers/sourcing/suppliers/aliexpress.ts</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">export class</span> <span class="t">AliExpressAdapter</span> <span class="k">implements</span> <span class="t">ISupplierAdapter</span> {
+  name = <span class="s">'aliexpress'</span>
+  <span class="k">constructor</span>(<span class="k">private</span> appKey: <span class="t">string</span>, <span class="k">private</span> appSecret: <span class="t">string</span>) {}
+
+  <span class="c">// Gera assinatura HMAC-MD5 obrigatória da API AliExpress</span>
+  <span class="k">private</span> <span class="f">sign</span>(params: <span class="t">Record</span>&lt;<span class="t">string</span>, <span class="t">string</span>&gt;): <span class="t">string</span> {
+    <span class="k">const</span> sorted = <span class="t">Object</span>.<span class="f">keys</span>(params).<span class="f">sort</span>()
+      .<span class="f">map</span>(k => `${k}${params[k]}`).<span class="f">join</span>(<span class="s">''</span>)
+    <span class="k">const</span> { createHash } = <span class="f">require</span>(<span class="s">'crypto'</span>)
+    <span class="k">return</span> <span class="f">createHash</span>(<span class="s">'md5'</span>)
+      .<span class="f">update</span>(this.appSecret + sorted + this.appSecret)
+      .<span class="f">digest</span>(<span class="s">'hex'</span>).<span class="f">toUpperCase</span>()
+  }
+
+  <span class="k">async</span> <span class="f">search</span>(params: <span class="t">SearchParams</span>): <span class="t">Promise</span>&lt;<span class="t">RawSupplierProduct</span>[]&gt; {
+    <span class="k">const</span> data = <span class="k">await</span> this.<span class="f">call</span>(<span class="s">'aliexpress.affiliate.product.query'</span>, {
+      keywords:        params.keywords.<span class="f">join</span>(<span class="s">' '</span>),
+      min_sale_price:  (params.priceMin * <span class="n">100</span>).<span class="f">toString</span>(),
+      max_sale_price:  (params.priceMax * <span class="n">100</span>).<span class="f">toString</span>(),
+      page_no:         params.page.<span class="f">toString</span>(),
+      page_size:       params.pageSize.<span class="f">toString</span>(),
+      ship_to_country: <span class="s">'BR'</span>,
+      target_currency: <span class="s">'USD'</span>,
+      tracking_id:     <span class="s">'dropshipping_auto'</span>,
+    })
+    <span class="k">return</span> (data?.products?.product ?? []).<span class="f">map</span>(<span class="f">mapAliProduct</span>)
+  }
+}</code></pre>
+
+  <h3 class="file-label">lib/pricing.ts — Calculadora de preços</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">export function</span> <span class="f">calcularPreco</span>(
+  precoCustoOriginal: <span class="t">number</span>,
+  config: { margemLucroPct: <span class="t">number</span>; markupFrete: <span class="t">number</span>; moedaFornecedor: <span class="t">string</span> },
+  taxaCambio: <span class="t">number</span> = <span class="n">5.10</span>
+): <span class="t">PricingResult</span> {
+  <span class="k">const</span> fatorCambio = config.moedaFornecedor === <span class="s">'BRL'</span> ? <span class="n">1</span> : taxaCambio
+  <span class="k">const</span> precoCustoBRL = precoCustoOriginal * fatorCambio
+
+  <span class="c">// Base = custo + markup frete para cobrir imprevistos</span>
+  <span class="k">const</span> base = precoCustoBRL * (<span class="n">1</span> + config.markupFrete / <span class="n">100</span>)
+
+  <span class="c">// Margem sobre preço de venda: preço = base / (1 - margem%)</span>
+  <span class="k">const</span> precoExato = base / (<span class="n">1</span> - config.margemLucroPct / <span class="n">100</span>)
+  <span class="k">const</span> precoFinal = <span class="f">arredondarPreco</span>(precoExato)  <span class="c">// ex: 29.90, 49.99</span>
+
+  <span class="k">return</span> {
+    precoCusto:      <span class="f">round</span>(precoCustoBRL),
+    precoFinal,
+    precoComparacao: <span class="f">arredondarPreco</span>(precoFinal * <span class="n">1.3</span>),  <span class="c">// preço riscado</span>
+    margemRealPct:   <span class="f">round</span>(((precoFinal - base) / precoFinal) * <span class="n">100</span>),
+  }
+}
+
+<span class="k">function</span> <span class="f">arredondarPreco</span>(valor: <span class="t">number</span>): <span class="t">number</span> {
+  <span class="k">const</span> int = <span class="t">Math</span>.<span class="f">floor</span>(valor); <span class="k">const</span> dec = valor - int
+  <span class="k">if</span> (dec &lt; <span class="n">0.45</span>) <span class="k">return</span> <span class="f">round</span>(int - <span class="n">0.01</span>)  <span class="c">// 29.99</span>
+  <span class="k">if</span> (dec &lt; <span class="n">0.95</span>) <span class="k">return</span> <span class="f">round</span>(int + <span class="n">0.90</span>)  <span class="c">// 29.90</span>
+  <span class="k">return</span> <span class="f">round</span>(int + <span class="n">0.99</span>)                  <span class="c">// 29.99</span>
+}</code></pre>
+
+  <h3 class="file-label">workers/sourcing/index.ts — Orquestrador principal</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">export async function</span> <span class="f">runSourcingWorker</span>(options: <span class="t">SourcingWorkerOptions</span>) {
+  <span class="k">const</span> config      = <span class="k">await</span> <span class="f">loadAdminConfig</span>(options.adminId)
+  <span class="k">const</span> adapters    = <span class="f">buildAdapters</span>(config)  <span class="c">// AliExpress, CJ, etc.</span>
+  <span class="k">const</span> taxaCambio  = <span class="k">await</span> <span class="f">buscarTaxaCambio</span>()  <span class="c">// AwesomeAPI USD-BRL</span>
+  <span class="k">let</span> publicados = <span class="n">0</span>
+
+  <span class="k">for</span> (<span class="k">const</span> adapter <span class="k">of</span> adapters) {
+    <span class="k">for</span> (<span class="k">const</span> keyword <span class="k">of</span> config.palavras_chave) {
+      <span class="k">if</span> (publicados &gt;= config.max_produtos_dia) <span class="k">return</span>
+
+      <span class="k">const</span> produtos = <span class="k">await</span> adapter.<span class="f">search</span>({ keywords: [keyword], ... })
+
+      <span class="k">for</span> (<span class="k">const</span> produto <span class="k">of</span> produtos) {
+        <span class="c">// Verifica duplicata, faixa de preço, estoque mínimo</span>
+        <span class="k">if</span> (<span class="k">await</span> <span class="f">produtoJaExiste</span>(options.adminId, adapter.name, produto.externalId)) <span class="k">continue</span>
+        <span class="k">if</span> (!<span class="f">dentroDoFiltroDePreco</span>(produto.price * taxaCambio, config)) <span class="k">continue</span>
+
+        <span class="k">const</span> conteudo     = <span class="k">await</span> <span class="f">processarConteudo</span>(produto)   <span class="c">// traduz, SEO</span>
+        <span class="k">const</span> imagens      = <span class="k">await</span> <span class="f">processarImagens</span>(produto.images, tempId)
+        <span class="k">const</span> precificacao = <span class="f">calcularPreco</span>(produto.price, config, taxaCambio)
+
+        <span class="k">await</span> supabase.from(<span class="s">'produtos'</span>).<span class="f">insert</span>({
+          ...conteudo, imagens,
+          preco_venda:      precificacao.precoFinal,
+          preco_comparacao: precificacao.precoComparacao,
+          status:           config.auto_publish ? <span class="s">'active'</span> : <span class="s">'draft'</span>,
+        })
+        publicados++
+      }
+    }
+  }
+  <span class="k">return</span> { publicados }
+}</code></pre>
+</div>
+
+<!-- ──────────────────────── MÓDULO 3 ─────────────────────────── -->
+<div class="section" id="m3">
+  <div class="section-header">
+    <span class="section-num">M3</span>
+    <div><h2>E-commerce Frontend</h2><p>Next.js 14 · Server Components · Zustand · Checkout com frete em tempo real.</p></div>
+  </div>
+
+  <h3 class="file-label">app/(store)/page.tsx — Homepage (SSR + cache 5min)</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">import</span> { createServerComponentClient } <span class="k">from</span> <span class="s">'@supabase/auth-helpers-nextjs'</span>
+<span class="k">import</span> { cookies } <span class="k">from</span> <span class="s">'next/headers'</span>
+
+<span class="k">export const</span> revalidate = <span class="n">300</span>  <span class="c">// ISR: revalida a cada 5 minutos</span>
+
+<span class="k">export default async function</span> <span class="f">HomePage</span>() {
+  <span class="k">const</span> supabase = <span class="f">createServerComponentClient</span>({ cookies })
+
+  <span class="k">const</span> { data: destaques } = <span class="k">await</span> supabase
+    .from(<span class="s">'produtos'</span>)
+    .<span class="f">select</span>(<span class="s">'id, titulo, slug, imagens, preco_venda, preco_comparacao'</span>)
+    .<span class="f">eq</span>(<span class="s">'status'</span>, <span class="s">'active'</span>).<span class="f">eq</span>(<span class="s">'destaque'</span>, <span class="k">true</span>).<span class="f">limit</span>(<span class="n">8</span>)
+
+  <span class="k">const</span> { data: recentes } = <span class="k">await</span> supabase
+    .from(<span class="s">'produtos'</span>)
+    .<span class="f">select</span>(<span class="s">'id, titulo, slug, imagens, preco_venda, preco_comparacao'</span>)
+    .<span class="f">eq</span>(<span class="s">'status'</span>, <span class="s">'active'</span>)
+    .<span class="f">order</span>(<span class="s">'created_at'</span>, { ascending: <span class="k">false</span> }).<span class="f">limit</span>(<span class="n">16</span>)
+
+  <span class="k">return</span> (
+    &lt;main&gt;
+      &lt;<span class="t">HeroBanner</span> /&gt;
+      &lt;section&gt;
+        &lt;h2&gt;Mais Vendidos&lt;/h2&gt;
+        &lt;div className=<span class="s">'grid grid-cols-2 md:grid-cols-4 gap-4'</span>&gt;
+          {destaques?.map(p =&gt; &lt;<span class="t">ProductCard</span> key={p.id} product={p} /&gt;)}
+        &lt;/div&gt;
+      &lt;/section&gt;
+    &lt;/main&gt;
+  )
+}</code></pre>
+
+  <h3 class="file-label">hooks/useCart.ts — Carrinho Zustand com persistência</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">import</span> { create } <span class="k">from</span> <span class="s">'zustand'</span>
+<span class="k">import</span> { persist } <span class="k">from</span> <span class="s">'zustand/middleware'</span>
+
+<span class="k">export const</span> useCart = <span class="f">create</span>&lt;<span class="t">CartStore</span>&gt;()(<span class="f">persist</span>(
+  (set, get) =&gt; ({
+    items: [],
+    <span class="f">addItem</span>: (item) =&gt; <span class="f">set</span>(s =&gt; {
+      <span class="k">const</span> exists = s.items.<span class="f">find</span>(i =&gt; i.id === item.id)
+      <span class="k">if</span> (exists) <span class="k">return</span> { items: s.items.<span class="f">map</span>(i =&gt;
+        i.id === item.id ? { ...i, quantidade: i.quantidade + <span class="n">1</span> } : i
+      )}
+      <span class="k">return</span> { items: [...s.items, { ...item, quantidade: <span class="n">1</span> }] }
+    }),
+    <span class="f">removeItem</span>: (id) =&gt; <span class="f">set</span>(s =&gt; ({ items: s.items.<span class="f">filter</span>(i =&gt; i.id !== id) })),
+    <span class="f">updateQty</span>: (id, qty) =&gt; <span class="f">set</span>(s =&gt; ({
+      items: qty &lt;= <span class="n">0</span> ? s.items.<span class="f">filter</span>(i =&gt; i.id !== id)
+             : s.items.<span class="f">map</span>(i =&gt; i.id === id ? { ...i, quantidade: qty } : i)
+    })),
+    <span class="f">clear</span>: () =&gt; <span class="f">set</span>({ items: [] }),
+    <span class="f">total</span>: () =&gt; <span class="f">get</span>().items.<span class="f">reduce</span>((acc, i) =&gt; acc + i.preco * i.quantidade, <span class="n">0</span>),
+  }),
+  { name: <span class="s">'cart-storage'</span> }  <span class="c">// persiste no localStorage</span>
+))</code></pre>
+
+  <h3 class="file-label">app/api/checkout/session/route.ts</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">export async function</span> <span class="f">POST</span>(req: <span class="t">NextRequest</span>) {
+  <span class="k">const</span> { items, enderecoId, cepDestino } = <span class="k">await</span> req.<span class="f">json</span>()
+
+  <span class="c">// 1. Busca preços atuais do banco — nunca confiar no client</span>
+  <span class="k">const</span> { data: produtos } = <span class="k">await</span> supabase.from(<span class="s">'produtos'</span>)
+    .<span class="f">select</span>(<span class="s">'id, preco_venda, estoque, peso_gramas'</span>)
+    .<span class="f">in</span>(<span class="s">'id'</span>, items.<span class="f">map</span>((i: <span class="t">any</span>) =&gt; i.id))
+
+  <span class="c">// 2. Calcula totais server-side</span>
+  <span class="k">const</span> subtotal = produtos!.<span class="f">reduce</span>((acc, p) =&gt; {
+    <span class="k">const</span> item = items.<span class="f">find</span>((i: <span class="t">any</span>) =&gt; i.id === p.id)
+    <span class="k">return</span> acc + p.preco_venda * item.quantidade
+  }, <span class="n">0</span>)
+
+  <span class="c">// 3. Calcula frete via Correios/Melhor Envio</span>
+  <span class="k">const</span> frete = <span class="k">await</span> <span class="f">calcularFreteOtimizado</span>({ produtos: produtos!, cepDestino })
+
+  <span class="c">// 4. Cria sessão no Redis (TTL 30min) — não persiste no banco ainda</span>
+  <span class="k">const</span> sessionId = crypto.<span class="f">randomUUID</span>()
+  <span class="k">await</span> redis.<span class="f">setex</span>(`checkout:${sessionId}`, <span class="n">1800</span>, <span class="t">JSON</span>.<span class="f">stringify</span>({
+    items, subtotal, frete, enderecoId, createdAt: <span class="t">Date</span>.<span class="f">now</span>()
+  }))
+
+  <span class="k">return</span> NextResponse.<span class="f">json</span>({ sessionId, subtotal, frete, total: subtotal + frete.preco })
+}</code></pre>
+</div>
+
+<!-- ──────────────────────── MÓDULO 4 ─────────────────────────── -->
+<div class="section" id="m4">
+  <div class="section-header">
+    <span class="section-num">M4</span>
+    <div><h2>Pagamentos e Webhooks — Brasil</h2><p>Pix · Cartão parcelado · Boleto · Webhooks HMAC autenticados.</p></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body"><strong>Idempotência obrigatória</strong>Cada evento de pagamento é marcado no Redis com TTL de 24h. Se o Mercado Pago reenviar o mesmo webhook, o sistema detecta e ignora sem reprocessar o fulfillment.</div>
+  </div>
+
+  <h3 class="file-label">lib/payment/mercadopago.ts</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">import</span> MercadoPagoConfig, { Payment } <span class="k">from</span> <span class="s">'mercadopago'</span>
+
+<span class="k">const</span> payment = <span class="k">new</span> <span class="t">Payment</span>(<span class="k">new</span> <span class="t">MercadoPagoConfig</span>({
+  accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!
+}))
+
+<span class="c">// ── PIX (aprovação instantânea) ─────────────────────────────────</span>
+<span class="k">export async function</span> <span class="f">criarPix</span>(data: <span class="t">PixPaymentData</span>) {
+  <span class="k">return</span> payment.<span class="f">create</span>({
+    body: {
+      transaction_amount: data.valor,
+      description:        data.descricao,
+      payment_method_id:  <span class="s">'pix'</span>,
+      payer: { email: data.clienteEmail,
+               identification: { type: <span class="s">'CPF'</span>, number: data.clienteCpf } },
+      notification_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhooks/payment`,
+    },
+    requestOptions: { idempotencyKey: data.idempotencyKey },
+  })
+}
+
+<span class="c">// ── Cartão de crédito parcelado ─────────────────────────────────</span>
+<span class="k">export async function</span> <span class="f">criarCartaoCredito</span>(data: <span class="t">CreditCardData</span>) {
+  <span class="k">return</span> payment.<span class="f">create</span>({
+    body: {
+      transaction_amount: data.valor,
+      token:              data.token,        <span class="c">// tokenizado no frontend via SDK MP</span>
+      installments:       data.parcelas,
+      payment_method_id:  <span class="s">'credit_card'</span>,
+      payer: { email: data.clienteEmail,
+               identification: { type: <span class="s">'CPF'</span>, number: data.clienteCpf } },
+      notification_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhooks/payment`,
+    },
+    requestOptions: { idempotencyKey: data.idempotencyKey },
+  })
+}
+
+<span class="c">// ── Boleto bancário ─────────────────────────────────────────────</span>
+<span class="k">export async function</span> <span class="f">criarBoleto</span>(data: <span class="t">BoletoData</span>) {
+  <span class="k">return</span> payment.<span class="f">create</span>({
+    body: {
+      transaction_amount: data.valor,
+      payment_method_id:  <span class="s">'bolbradesco'</span>,
+      payer: {
+        email: data.clienteEmail, first_name: data.firstName, last_name: data.lastName,
+        identification: { type: <span class="s">'CPF'</span>, number: data.clienteCpf },
+        address: { zip_code: data.cep, street_name: <span class="s">''</span>, street_number: <span class="s">''</span> }
+      },
+      notification_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhooks/payment`,
+    },
+    requestOptions: { idempotencyKey: data.idempotencyKey },
+  })
+}</code></pre>
+
+  <h3 class="file-label">app/api/webhooks/payment/route.ts</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">import</span> { createHmac, timingSafeEqual } <span class="k">from</span> <span class="s">'crypto'</span>
+
+<span class="k">function</span> <span class="f">verifySignature</span>(
+  xSignature: <span class="t">string</span>, xRequestId: <span class="t">string</span>,
+  dataId: <span class="t">string</span>,    secret: <span class="t">string</span>
+): <span class="t">boolean</span> {
+  <span class="k">const</span> parts = xSignature.<span class="f">split</span>(<span class="s">','</span>).<span class="f">reduce</span>((acc, part) =&gt; {
+    <span class="k">const</span> [key, val] = part.<span class="f">trim</span>().<span class="f">split</span>(<span class="s">'='</span>); acc[key] = val; <span class="k">return</span> acc
+  }, {} <span class="k">as</span> <span class="t">Record</span>&lt;<span class="t">string</span>, <span class="t">string</span>&gt;)
+
+  <span class="k">const</span> manifest = `id:${dataId};request-id:${xRequestId};ts:${parts.ts};`
+  <span class="k">const</span> hmac = <span class="f">createHmac</span>(<span class="s">'sha256'</span>, secret).<span class="f">update</span>(manifest).<span class="f">digest</span>(<span class="s">'hex'</span>)
+  <span class="k">return</span> <span class="f">timingSafeEqual</span>(<span class="t">Buffer</span>.<span class="f">from</span>(hmac), <span class="t">Buffer</span>.<span class="f">from</span>(parts.v1))
+}
+
+<span class="k">export async function</span> <span class="f">POST</span>(req: <span class="t">NextRequest</span>) {
+  <span class="k">const</span> xSignature = req.headers.<span class="f">get</span>(<span class="s">'x-signature'</span>) ?? <span class="s">''</span>
+  <span class="k">const</span> xRequestId = req.headers.<span class="f">get</span>(<span class="s">'x-request-id'</span>) ?? <span class="s">''</span>
+  <span class="k">const</span> body       = <span class="k">await</span> req.<span class="f">json</span>()
+  <span class="k">const</span> dataId     = body.data?.id?.<span class="f">toString</span>() ?? <span class="s">''</span>
+
+  <span class="c">// 1. Verifica assinatura HMAC — rejeita imediatamente se inválida</span>
+  <span class="k">const</span> isValid = <span class="f">verifySignature</span>(xSignature, xRequestId, dataId,
+    process.env.MERCADOPAGO_WEBHOOK_SECRET!)
+  <span class="k">if</span> (!isValid) <span class="k">return</span> NextResponse.<span class="f">json</span>({ error: <span class="s">'Invalid signature'</span> }, { status: <span class="n">401</span> })
+
+  <span class="k">if</span> (body.type !== <span class="s">'payment'</span> || body.action !== <span class="s">'payment.updated'</span>)
+    <span class="k">return</span> NextResponse.<span class="f">json</span>({ received: <span class="k">true</span> })
+
+  <span class="c">// 2. Idempotência — previne double fulfillment</span>
+  <span class="k">const</span> jaProcessado = <span class="k">await</span> redis.<span class="f">get</span>(`webhook:mp:${dataId}`)
+  <span class="k">if</span> (jaProcessado) <span class="k">return</span> NextResponse.<span class="f">json</span>({ received: <span class="k">true</span>, skipped: <span class="k">true</span> })
+
+  <span class="c">// 3. Busca detalhes na API do MP e verifica status</span>
+  <span class="k">const</span> paymentDetails = <span class="k">await</span> <span class="f">buscarPagamentoMP</span>(dataId)
+  <span class="k">if</span> (paymentDetails.status !== <span class="s">'approved'</span>)
+    <span class="k">return</span> NextResponse.<span class="f">json</span>({ received: <span class="k">true</span> })
+
+  <span class="c">// 4. Atualiza pedido no banco</span>
+  <span class="k">const</span> { data: pedido } = <span class="k">await</span> supabase.from(<span class="s">'pedidos'</span>)
+    .<span class="f">update</span>({ status_pagamento: <span class="s">'approved'</span>, status: <span class="s">'payment_approved'</span>,
+              gateway_tx_id: dataId, pago_em: <span class="k">new</span> <span class="t">Date</span>().<span class="f">toISOString</span>() })
+    .<span class="f">eq</span>(<span class="s">'gateway_tx_id'</span>, paymentDetails.external_reference)
+    .<span class="f">select</span>(<span class="s">'id, admin_id'</span>).<span class="f">single</span>()
+
+  <span class="c">// 5. Marca como processado no Redis (TTL 24h)</span>
+  <span class="k">await</span> redis.<span class="f">setex</span>(`webhook:mp:${dataId}`, <span class="n">86400</span>, <span class="s">'1'</span>)
+
+  <span class="c">// 6. Dispara fulfillment autônomo (fire-and-forget)</span>
+  <span class="k">if</span> (pedido) {
+    <span class="f">fetch</span>(`${process.env.INTERNAL_WORKER_URL}/api/fulfillment/process`, {
+      method: <span class="s">'POST'</span>,
+      headers: { Authorization: `Bearer ${process.env.WORKER_SECRET_KEY}` },
+      body: <span class="t">JSON</span>.<span class="f">stringify</span>({ pedidoId: pedido.id, adminId: pedido.admin_id })
+    }).<span class="f">catch</span>(() => {})
+  }
+
+  <span class="k">return</span> NextResponse.<span class="f">json</span>({ received: <span class="k">true</span>, pedidoId: pedido?.id })
+}</code></pre>
+</div>
+
+<!-- ──────────────────────── MÓDULO 5 ─────────────────────────── -->
+<div class="section" id="m5">
+  <div class="section-header">
+    <span class="section-num">M5</span>
+    <div><h2>Fulfillment Autônomo</h2><p>Compra no fornecedor · Rastreamento · Notificações automáticas.</p></div>
+  </div>
+
+  <h3 class="file-label">workers/fulfillment/index.ts — Orquestrador</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">export async function</span> <span class="f">processarFulfillment</span>(pedidoId: <span class="t">string</span>, adminId: <span class="t">string</span>) {
+  <span class="k">const</span> { data: pedido } = <span class="k">await</span> supabase.from(<span class="s">'pedidos'</span>)
+    .<span class="f">select</span>(<span class="s">'*, clientes(nome, email, telefone)'</span>).<span class="f">eq</span>(<span class="s">'id'</span>, pedidoId).<span class="f">single</span>()
+
+  <span class="k">if</span> (!pedido || pedido.status !== <span class="s">'payment_approved'</span>) <span class="k">return</span>
+
+  <span class="k">await</span> supabase.from(<span class="s">'pedidos'</span>)
+    .<span class="f">update</span>({ status: <span class="s">'purchasing_supplier'</span> }).<span class="f">eq</span>(<span class="s">'id'</span>, pedidoId)
+
+  <span class="k">for</span> (<span class="k">const</span> item <span class="k">of</span> pedido.itens) {
+    <span class="k">const</span> resultado = <span class="k">await</span> <span class="f">realizarPedidoFornecedor</span>({
+      fornecedor: item.fornecedor_nome,
+      externalId: item.fornecedor_item_id,
+      variante:   item.variante,
+      quantidade: item.quantidade,
+      endereco: { nome: pedido.clientes.nome, email: pedido.clientes.email,
+                  ...pedido.endereco_entrega },
+      adminId,
+    })
+    <span class="k">await</span> supabase.from(<span class="s">'pedidos'</span>)
+      .<span class="f">update</span>({ fornecedor_order_id: resultado.orderId, status: <span class="s">'supplier_confirmed'</span> })
+      .<span class="f">eq</span>(<span class="s">'id'</span>, pedidoId)
+  }
+
+  <span class="c">// Emite NF-e automaticamente após confirmação do fornecedor</span>
+  <span class="k">await</span> <span class="f">emitirNFe</span>(pedido, adminId).<span class="f">catch</span>(err =&gt; <span class="f">logWorker</span>(<span class="s">'warning'</span>, err.message))
+
+  <span class="k">await</span> <span class="f">notificarCliente</span>({
+    email: pedido.clientes.email, nome: pedido.clientes.nome,
+    tipo:  <span class="s">'pedido_confirmado'</span>,
+    dados: { numeroPedido: pedido.numero, estimativaEntrega: <span class="s">'15-30 dias'</span> }
+  })
+}</code></pre>
+
+  <h3 class="file-label">workers/fulfillment/tracking.ts — Sincronização de rastreamento</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="c">// Executado a cada 4h pelo pg_cron para pedidos em andamento</span>
+<span class="k">export async function</span> <span class="f">sincronizarRastreamentos</span>(adminId: <span class="t">string</span>) {
+  <span class="k">const</span> { data: pedidos } = <span class="k">await</span> supabase.from(<span class="s">'pedidos'</span>)
+    .<span class="f">select</span>(<span class="s">'id, fornecedor_order_id, fornecedor_nome, clientes(email, nome)'</span>)
+    .<span class="f">eq</span>(<span class="s">'admin_id'</span>, adminId)
+    .<span class="f">in</span>(<span class="s">'status'</span>, [<span class="s">'supplier_confirmed'</span>, <span class="s">'shipped'</span>, <span class="s">'in_transit'</span>])
+
+  <span class="k">for</span> (<span class="k">const</span> pedido <span class="k">of</span> pedidos ?? []) {
+    <span class="k">const</span> tracking = <span class="k">await</span> <span class="f">buscarRastreioFornecedor</span>(
+      pedido.fornecedor_nome, pedido.fornecedor_order_id, adminId
+    )
+    <span class="k">if</span> (!tracking?.trackingNumber) <span class="k">continue</span>
+
+    <span class="k">const</span> novoStatus = tracking.delivered ? <span class="s">'delivered'</span>
+      : tracking.shipped ? <span class="s">'in_transit'</span> : <span class="s">'shipped'</span>
+
+    <span class="k">await</span> supabase.from(<span class="s">'pedidos'</span>).<span class="f">update</span>({
+      codigo_rastreio: tracking.trackingNumber,
+      transportadora:  tracking.carrier,
+      status:          novoStatus,
+    }).<span class="f">eq</span>(<span class="s">'id'</span>, pedido.id)
+
+    <span class="k">await</span> <span class="f">notificarCliente</span>({
+      email: pedido.clientes.email, nome: pedido.clientes.nome,
+      tipo:  novoStatus === <span class="s">'in_transit'</span> ? <span class="s">'pedido_enviado'</span> : <span class="s">'pedido_entregue'</span>,
+      dados: {
+        codigoRastreio: tracking.trackingNumber,
+        linkRastreio: `https://rastreamento.correios.com.br/${tracking.trackingNumber}`
+      }
+    })
+  }
+}</code></pre>
+</div>
+
+<!-- ──────────────────────── MÓDULO 6 ─────────────────────────── -->
+<div class="section" id="m6">
+  <div class="section-header">
+    <span class="section-num">M6</span>
+    <div><h2>Supabase — Schema PostgreSQL e RLS</h2><p>6 tabelas · enums tipados · triggers automáticos · Row Level Security.</p></div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Tabela</th><th>Campos principais</th><th>Relações</th></tr></thead>
+      <tbody>
+        <tr><td><code>administrador</code></td><td>id, user_id, nome, email, onboarding_ok</td><td>auth.users (1:1)</td></tr>
+        <tr><td><code>configuracoes_gerais</code></td><td>admin_id, categorias, palavras_chave, margem_lucro_pct, gateways, nfe</td><td>administrador (1:1)</td></tr>
+        <tr><td><code>produtos</code></td><td>id, admin_id, fornecedor_nome, titulo, preco_venda, status, slug</td><td>administrador (N:1)</td></tr>
+        <tr><td><code>clientes</code></td><td>id, user_id, nome, email, cpf_hash, enderecos JSONB</td><td>auth.users (1:1)</td></tr>
+        <tr><td><code>pedidos</code></td><td>id, numero, cliente_id, admin_id, itens JSONB, total, status, codigo_rastreio</td><td>clientes + administrador</td></tr>
+        <tr><td><code>logs</code></td><td>id, nivel, servico, acao, mensagem, payload, ts</td><td>pedidos (opcional)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="file-label">supabase/migrations/001_initial_schema.sql</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="c">-- Extensões necessárias</span>
+CREATE EXTENSION IF NOT EXISTS <span class="s">'uuid-ossp'</span>;
+CREATE EXTENSION IF NOT EXISTS <span class="s">'pg_cron'</span>;
+CREATE EXTENSION IF NOT EXISTS <span class="s">'pg_net'</span>;
+CREATE EXTENSION IF NOT EXISTS <span class="s">'pgcrypto'</span>;
+
+<span class="c">-- Enums tipados</span>
+CREATE TYPE order_status AS ENUM (
+  <span class="s">'pending_payment'</span>, <span class="s">'payment_approved'</span>, <span class="s">'purchasing_supplier'</span>,
+  <span class="s">'supplier_confirmed'</span>, <span class="s">'shipped'</span>, <span class="s">'in_transit'</span>, <span class="s">'delivered'</span>,
+  <span class="s">'cancelled'</span>, <span class="s">'refunded'</span>
+);
+CREATE TYPE payment_method AS ENUM (<span class="s">'pix'</span>, <span class="s">'credit_card'</span>, <span class="s">'boleto'</span>);
+CREATE TYPE payment_status AS ENUM (<span class="s">'pending'</span>, <span class="s">'processing'</span>, <span class="s">'approved'</span>, <span class="s">'refused'</span>, <span class="s">'refunded'</span>, <span class="s">'chargeback'</span>);
+CREATE TYPE product_status AS ENUM (<span class="s">'draft'</span>, <span class="s">'active'</span>, <span class="s">'paused'</span>, <span class="s">'out_of_stock'</span>, <span class="s">'removed'</span>);
+CREATE TYPE log_level       AS ENUM (<span class="s">'info'</span>, <span class="s">'warning'</span>, <span class="s">'error'</span>, <span class="s">'critical'</span>);
+
+CREATE TABLE administrador (
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id       UUID REFERENCES auth.users(id) ON DELETE CASCADE UNIQUE NOT NULL,
+  nome          TEXT NOT NULL,
+  email         TEXT NOT NULL UNIQUE,
+  onboarding_ok BOOLEAN DEFAULT FALSE,
+  created_at    TIMESTAMPTZ DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE configuracoes_gerais (
+  id                     UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  admin_id               UUID REFERENCES administrador(id) ON DELETE CASCADE UNIQUE NOT NULL,
+  categorias_interesse   TEXT[] NOT NULL DEFAULT <span class="s">'{}'</span>,
+  palavras_chave         TEXT[] NOT NULL DEFAULT <span class="s">'{}'</span>,
+  preco_custo_min        NUMERIC(10,2) DEFAULT 0,
+  preco_custo_max        NUMERIC(10,2) DEFAULT 9999.99,
+  margem_lucro_pct       NUMERIC(5,2)  NOT NULL DEFAULT 40.00,
+  markup_frete           NUMERIC(5,2)  DEFAULT 10.00,
+  moeda_fornecedor       CHAR(3)       DEFAULT <span class="s">'USD'</span>,
+  nome_loja              TEXT NOT NULL DEFAULT <span class="s">'Minha Loja'</span>,
+  logo_url               TEXT,
+  cor_primaria           CHAR(7)       DEFAULT <span class="s">'#000000'</span>,
+  gateway_pagamento      TEXT DEFAULT <span class="s">'mercadopago'</span>,
+  gateway_access_token   TEXT,
+  gateway_public_key     TEXT,
+  aliexpress_app_key     TEXT,
+  aliexpress_app_secret  TEXT,
+  cj_api_key             TEXT,
+  auto_publish           BOOLEAN DEFAULT TRUE,
+  max_produtos_dia       INTEGER DEFAULT 50,
+  transportadoras        TEXT[] DEFAULT <span class="s">'{"correios","melhor_envio"}'</span>,
+  nfe_provider           TEXT DEFAULT <span class="s">'focusnfe'</span>,
+  nfe_token              TEXT,
+  cnpj_emitente          TEXT,
+  created_at             TIMESTAMPTZ DEFAULT NOW(),
+  updated_at             TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE produtos (
+  id                  UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  admin_id            UUID REFERENCES administrador(id) ON DELETE CASCADE NOT NULL,
+  fornecedor_nome     TEXT NOT NULL,
+  fornecedor_item_id  TEXT NOT NULL,
+  fornecedor_url      TEXT,
+  preco_custo         NUMERIC(10,2) NOT NULL,
+  preco_custo_moeda   CHAR(3) DEFAULT <span class="s">'BRL'</span>,
+  titulo              TEXT NOT NULL,
+  descricao           TEXT,
+  descricao_html      TEXT,
+  imagens             TEXT[] DEFAULT <span class="s">'{}'</span>,
+  categorias          TEXT[] DEFAULT <span class="s">'{}'</span>,
+  tags                TEXT[] DEFAULT <span class="s">'{}'</span>,
+  sku                 TEXT UNIQUE,
+  preco_venda         NUMERIC(10,2) NOT NULL,
+  preco_comparacao    NUMERIC(10,2),
+  peso_gramas         INTEGER,
+  variantes           JSONB,
+  estoque             INTEGER DEFAULT 0,
+  estoque_alerta      INTEGER DEFAULT 5,
+  status              product_status DEFAULT <span class="s">'draft'</span>,
+  destaque            BOOLEAN DEFAULT FALSE,
+  meta_titulo         TEXT,
+  meta_descricao      TEXT,
+  slug                TEXT UNIQUE,
+  created_at          TIMESTAMPTZ DEFAULT NOW(),
+  updated_at          TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE (fornecedor_nome, fornecedor_item_id, admin_id)
+);
+
+CREATE TABLE clientes (
+  id               UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id          UUID REFERENCES auth.users(id) ON DELETE SET NULL UNIQUE,
+  nome             TEXT NOT NULL,
+  email            TEXT NOT NULL UNIQUE,
+  telefone         TEXT,
+  cpf_hash         TEXT, <span class="c">-- SHA-256, NUNCA plain text (LGPD)</span>
+  data_nascimento  DATE,
+  enderecos        JSONB DEFAULT <span class="s">'[]'::jsonb</span>,
+  aceita_marketing BOOLEAN DEFAULT FALSE,
+  lgpd_aceito_em   TIMESTAMPTZ,
+  total_pedidos    INTEGER DEFAULT 0,
+  total_gasto      NUMERIC(12,2) DEFAULT 0,
+  created_at       TIMESTAMPTZ DEFAULT NOW(),
+  updated_at       TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE pedidos (
+  id                  UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  numero              TEXT UNIQUE NOT NULL,
+  cliente_id          UUID REFERENCES clientes(id) ON DELETE RESTRICT NOT NULL,
+  admin_id            UUID REFERENCES administrador(id) ON DELETE RESTRICT NOT NULL,
+  itens               JSONB NOT NULL,
+  endereco_entrega    JSONB NOT NULL,
+  subtotal            NUMERIC(10,2) NOT NULL,
+  desconto            NUMERIC(10,2) DEFAULT 0,
+  frete               NUMERIC(10,2) NOT NULL DEFAULT 0,
+  total               NUMERIC(10,2) NOT NULL,
+  metodo_pagamento    payment_method NOT NULL,
+  status_pagamento    payment_status DEFAULT <span class="s">'pending'</span>,
+  gateway_tx_id       TEXT,
+  gateway_response    JSONB,
+  pago_em             TIMESTAMPTZ,
+  status              order_status DEFAULT <span class="s">'pending_payment'</span>,
+  fornecedor_order_id TEXT,
+  codigo_rastreio     TEXT,
+  transportadora      TEXT,
+  nfe_numero          TEXT,
+  nfe_chave           TEXT,
+  nfe_pdf_url         TEXT,
+  nfe_emitida_em      TIMESTAMPTZ,
+  created_at          TIMESTAMPTZ DEFAULT NOW(),
+  updated_at          TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE logs (
+  id         UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  nivel      log_level NOT NULL DEFAULT <span class="s">'info'</span>,
+  servico    TEXT NOT NULL,
+  acao       TEXT NOT NULL,
+  mensagem   TEXT,
+  payload    JSONB,
+  pedido_id  UUID REFERENCES pedidos(id) ON DELETE SET NULL,
+  produto_id UUID REFERENCES produtos(id) ON DELETE SET NULL,
+  user_id    UUID,
+  ts         TIMESTAMPTZ DEFAULT NOW()
+);
+
+<span class="c">-- Índices de performance</span>
+CREATE INDEX idx_produtos_admin_status ON produtos(admin_id, status);
+CREATE INDEX idx_produtos_slug         ON produtos(slug);
+CREATE INDEX idx_produtos_categorias   ON produtos USING GIN(categorias);
+CREATE INDEX idx_produtos_tags         ON produtos USING GIN(tags);
+CREATE INDEX idx_pedidos_cliente       ON pedidos(cliente_id);
+CREATE INDEX idx_pedidos_status        ON pedidos(status);
+CREATE INDEX idx_logs_ts               ON logs(ts DESC);
+CREATE INDEX idx_logs_nivel            ON logs(nivel);
+
+<span class="c">-- Auto-gerador de número de pedido</span>
+CREATE SEQUENCE pedido_seq START 1;
+CREATE OR REPLACE FUNCTION gerar_numero_pedido() RETURNS TEXT AS $$
+BEGIN RETURN <span class="s">'ORD-'</span> || TO_CHAR(NOW(), <span class="s">'YYYY'</span>) || <span class="s">'-'</span>
+  || LPAD(NEXTVAL(<span class="s">'pedido_seq'</span>)::TEXT, 5, <span class="s">'0'</span>); END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION trigger_numero_pedido() RETURNS TRIGGER AS $$
+BEGIN IF NEW.numero IS NULL OR NEW.numero = <span class="s">''</span> THEN
+  NEW.numero := gerar_numero_pedido(); END IF; RETURN NEW; END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER set_numero_pedido BEFORE INSERT ON pedidos
+  FOR EACH ROW EXECUTE FUNCTION trigger_numero_pedido();
+
+<span class="c">-- updated_at automático em todas as tabelas</span>
+CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS TRIGGER AS $$
+BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_admin_updated    BEFORE UPDATE ON administrador        FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+CREATE TRIGGER trg_config_updated   BEFORE UPDATE ON configuracoes_gerais FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+CREATE TRIGGER trg_produtos_updated BEFORE UPDATE ON produtos             FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+CREATE TRIGGER trg_clientes_updated BEFORE UPDATE ON clientes             FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+CREATE TRIGGER trg_pedidos_updated  BEFORE UPDATE ON pedidos              FOR EACH ROW EXECUTE FUNCTION touch_updated_at();</code></pre>
+
+  <h3 class="file-label">supabase/migrations/002_row_level_security.sql</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code>ALTER TABLE administrador        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE configuracoes_gerais ENABLE ROW LEVEL SECURITY;
+ALTER TABLE produtos             ENABLE ROW LEVEL SECURITY;
+ALTER TABLE clientes             ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pedidos              ENABLE ROW LEVEL SECURITY;
+ALTER TABLE logs                 ENABLE ROW LEVEL SECURITY;
+
+<span class="c">-- Admin vê apenas seus próprios dados</span>
+CREATE POLICY admin_self ON administrador
+  FOR ALL USING (user_id = auth.uid());
+
+<span class="c">-- Config pertence ao admin autenticado</span>
+CREATE POLICY config_owner ON configuracoes_gerais FOR ALL
+  USING (admin_id = (SELECT id FROM administrador WHERE user_id = auth.uid()));
+
+<span class="c">-- Admin: acesso total aos seus produtos</span>
+CREATE POLICY produtos_admin ON produtos FOR ALL
+  USING (admin_id = (SELECT id FROM administrador WHERE user_id = auth.uid()));
+
+<span class="c">-- Público anônimo: lê APENAS produtos ativos (loja pública)</span>
+CREATE POLICY produtos_public_read ON produtos
+  FOR SELECT USING (status = <span class="s">'active'</span>);
+
+<span class="c">-- Cliente vê apenas seus próprios dados</span>
+CREATE POLICY cliente_self ON clientes FOR ALL
+  USING (user_id = auth.uid());
+
+<span class="c">-- Cliente vê apenas seus pedidos</span>
+CREATE POLICY pedidos_cliente ON pedidos FOR SELECT
+  USING (cliente_id = (SELECT id FROM clientes WHERE user_id = auth.uid()));
+
+<span class="c">-- Admin vê e gerencia todos os pedidos da sua loja</span>
+CREATE POLICY pedidos_admin ON pedidos FOR ALL
+  USING (admin_id = (SELECT id FROM administrador WHERE user_id = auth.uid()));
+
+<span class="c">-- Apenas admins leem logs (service role escreve via SERVICE_ROLE_KEY)</span>
+CREATE POLICY logs_admin_read ON logs FOR SELECT
+  USING (EXISTS (SELECT 1 FROM administrador WHERE user_id = auth.uid()));</code></pre>
+
+  <h3 class="file-label">supabase/migrations/003_cron_jobs.sql</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="c">-- Worker de sourcing: a cada 6 horas</span>
+SELECT cron.schedule(
+  <span class="s">'sourcing-worker'</span>, <span class="s">'0 */6 * * *'</span>,
+  $$ SELECT net.http_post(
+    url     := current_setting(<span class="s">'app.sourcing_worker_url'</span>),
+    headers := jsonb_build_object(<span class="s">'Authorization'</span>, <span class="s">'Bearer '</span> || current_setting(<span class="s">'app.worker_secret'</span>)),
+    body    := <span class="s">'{"trigger":"cron"}'</span>::jsonb
+  ); $$
+);
+
+<span class="c">-- Sincronização de estoque: a cada 1 hora</span>
+SELECT cron.schedule(
+  <span class="s">'sync-stock'</span>, <span class="s">'0 * * * *'</span>,
+  $$ SELECT net.http_post(url := current_setting(<span class="s">'app.sync_worker_url'</span>),
+    headers := jsonb_build_object(<span class="s">'Authorization'</span>, <span class="s">'Bearer '</span> || current_setting(<span class="s">'app.worker_secret'</span>)),
+    body := <span class="s">'{"trigger":"sync_stock"}'</span>::jsonb); $$
+);
+
+<span class="c">-- Rastreamento de pedidos: a cada 4 horas</span>
+SELECT cron.schedule(
+  <span class="s">'sync-tracking'</span>, <span class="s">'0 */4 * * *'</span>,
+  $$ SELECT net.http_post(url := current_setting(<span class="s">'app.tracking_worker_url'</span>),
+    headers := jsonb_build_object(<span class="s">'Authorization'</span>, <span class="s">'Bearer '</span> || current_setting(<span class="s">'app.worker_secret'</span>)),
+    body := <span class="s">'{"trigger":"tracking"}'</span>::jsonb); $$
+);</code></pre>
+</div>
+
+<!-- ──────────────────────── MÓDULO 7 ─────────────────────────── -->
+<div class="section" id="m7">
+  <div class="section-header">
+    <span class="section-num">M7</span>
+    <div><h2>API Gateway Centralizado</h2><p>Único ponto de entrada · Rate limiting · Auth JWT · CORS · Logging estruturado.</p></div>
+  </div>
+
+  <h3 class="file-label">middleware.ts (raiz do projeto Next.js)</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="k">import</span> { NextRequest, NextResponse } <span class="k">from</span> <span class="s">'next/server'</span>
+<span class="k">import</span> { createMiddlewareClient } <span class="k">from</span> <span class="s">'@supabase/auth-helpers-nextjs'</span>
+<span class="k">import</span> { Ratelimit } <span class="k">from</span> <span class="s">'@upstash/ratelimit'</span>
+<span class="k">import</span> { Redis } <span class="k">from</span> <span class="s">'@upstash/redis'</span>
+
+<span class="k">const</span> ratelimitPublic = <span class="k">new</span> <span class="t">Ratelimit</span>({
+  redis: Redis.<span class="f">fromEnv</span>(),
+  limiter: Ratelimit.<span class="f">slidingWindow</span>(<span class="n">60</span>, <span class="s">'1 m'</span>),   <span class="c">// 60 req/min anônimo</span>
+  prefix: <span class="s">'rl:public'</span>,
+})
+
+<span class="k">const</span> ratelimitAuth = <span class="k">new</span> <span class="t">Ratelimit</span>({
+  redis: Redis.<span class="f">fromEnv</span>(),
+  limiter: Ratelimit.<span class="f">slidingWindow</span>(<span class="n">300</span>, <span class="s">'1 m'</span>),  <span class="c">// 300 req/min autenticado</span>
+  prefix: <span class="s">'rl:auth'</span>,
+})
+
+<span class="k">const</span> ADMIN_ROUTES = [<span class="s">'/api/admin'</span>, <span class="s">'/api/products/publish'</span>, <span class="s">'/api/sourcing'</span>]
+<span class="k">const</span> USER_ROUTES  = [<span class="s">'/api/orders'</span>, <span class="s">'/api/customer'</span>, <span class="s">'/api/checkout/confirm'</span>]
+
+<span class="k">export async function</span> <span class="f">middleware</span>(req: <span class="t">NextRequest</span>) {
+  <span class="k">const</span> res = NextResponse.<span class="f">next</span>()
+  <span class="k">const</span> ip  = req.ip ?? req.headers.<span class="f">get</span>(<span class="s">'x-forwarded-for'</span>) ?? <span class="s">'anon'</span>
+
+  <span class="c">// ── Segurança HTTP ──────────────────────────────────────────────</span>
+  res.headers.<span class="f">set</span>(<span class="s">'Access-Control-Allow-Origin'</span>,  process.env.ALLOWED_ORIGIN ?? <span class="s">'*'</span>)
+  res.headers.<span class="f">set</span>(<span class="s">'Access-Control-Allow-Methods'</span>, <span class="s">'GET,POST,PUT,DELETE,OPTIONS'</span>)
+  res.headers.<span class="f">set</span>(<span class="s">'X-Content-Type-Options'</span>, <span class="s">'nosniff'</span>)
+  res.headers.<span class="f">set</span>(<span class="s">'X-Frame-Options'</span>, <span class="s">'DENY'</span>)
+  res.headers.<span class="f">set</span>(<span class="s">'Referrer-Policy'</span>, <span class="s">'strict-origin-when-cross-origin'</span>)
+  <span class="k">if</span> (req.method === <span class="s">'OPTIONS'</span>) <span class="k">return</span> res
+
+  <span class="c">// ── Rate limiting ───────────────────────────────────────────────</span>
+  <span class="k">const</span> supabase = <span class="f">createMiddlewareClient</span>({ req, res })
+  <span class="k">const</span> { data: { session } } = <span class="k">await</span> supabase.auth.<span class="f">getSession</span>()
+  <span class="k">const</span> limiter = session ? ratelimitAuth : ratelimitPublic
+  <span class="k">const</span> id = session ? `user:${session.user.id}` : `ip:${ip}`
+  <span class="k">const</span> { success, limit, remaining, reset } = <span class="k">await</span> limiter.<span class="f">limit</span>(id)
+
+  res.headers.<span class="f">set</span>(<span class="s">'X-RateLimit-Limit'</span>,     limit.<span class="f">toString</span>())
+  res.headers.<span class="f">set</span>(<span class="s">'X-RateLimit-Remaining'</span>, remaining.<span class="f">toString</span>())
+
+  <span class="k">if</span> (!success) <span class="k">return</span> NextResponse.<span class="f">json</span>(
+    { error: <span class="s">'Too Many Requests'</span>, retryAfter: <span class="t">Math</span>.<span class="f">ceil</span>((reset - <span class="t">Date</span>.<span class="f">now</span>()) / <span class="n">1000</span>) },
+    { status: <span class="n">429</span>, headers: res.headers }
+  )
+
+  <span class="c">// ── Autenticação de rotas protegidas ───────────────────────────</span>
+  <span class="k">const</span> { pathname } = req.nextUrl
+  <span class="k">const</span> isAdmin = ADMIN_ROUTES.<span class="f">some</span>(r =&gt; pathname.<span class="f">startsWith</span>(r))
+  <span class="k">const</span> isUser  = USER_ROUTES.<span class="f">some</span>(r =&gt; pathname.<span class="f">startsWith</span>(r))
+
+  <span class="k">if</span> ((isAdmin || isUser) && !session)
+    <span class="k">return</span> NextResponse.<span class="f">json</span>({ error: <span class="s">'Unauthorized'</span> }, { status: <span class="n">401</span> })
+
+  <span class="k">if</span> (isAdmin && session?.user.user_metadata?.role !== <span class="s">'admin'</span>)
+    <span class="k">return</span> NextResponse.<span class="f">json</span>({ error: <span class="s">'Forbidden'</span> }, { status: <span class="n">403</span> })
+
+  <span class="k">return</span> res
+}
+
+<span class="k">export const</span> config = { matcher: [<span class="s">'/api/:path*'</span>, <span class="s">'/admin/:path*'</span>] }</code></pre>
+</div>
+
+<!-- ──────────────────────── DEPLOY ───────────────────────────── -->
+<div class="section" id="deploy">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <div><h2>Guia de Deploy — Do Zero ao Ar</h2><p>Passo a passo completo para produção.</p></div>
+  </div>
+
+  <ol class="steps">
+    <li><div class="step-n">1</div><div class="step-body"><strong>Criar projeto Supabase</strong><span>Acessar supabase.com → New Project → Região: <code>sa-east-1 (São Paulo)</code> → Guardar URL e chaves</span></div></li>
+    <li><div class="step-n">2</div><div class="step-body"><strong>Executar migrações SQL</strong><span>Supabase Dashboard → SQL Editor → rodar em ordem: <code>001_initial_schema.sql</code> → <code>002_row_level_security.sql</code> → <code>003_cron_jobs.sql</code></span></div></li>
+    <li><div class="step-n">3</div><div class="step-body"><strong>Configurar Storage</strong><span>Supabase → Storage → Novo bucket <code>produtos</code> → Público → MIME permitido: <code>image/*</code></span></div></li>
+    <li><div class="step-n">4</div><div class="step-body"><strong>Criar banco Redis no Upstash</strong><span>upstash.com → Create Database → Região: <code>us-east-1</code> → Copiar REST URL e Token</span></div></li>
+    <li><div class="step-n">5</div><div class="step-body"><strong>Deploy Vercel (frontend + API)</strong><span>Conectar repositório Git → Configurar todas as variáveis de ambiente → Deploy automático no push para main</span></div></li>
+    <li><div class="step-n">6</div><div class="step-body"><strong>Deploy Railway (workers)</strong><span>Serviço Node.js separado → mesmas variáveis de ambiente → start command: <code>node workers/start.js</code></span></div></li>
+    <li><div class="step-n">7</div><div class="step-body"><strong>Configurar vars no Supabase</strong><span>Settings → Configuration → adicionar <code>app.sourcing_worker_url</code>, <code>app.worker_secret</code>, <code>app.sync_worker_url</code>, <code>app.tracking_worker_url</code></span></div></li>
+    <li><div class="step-n">8</div><div class="step-body"><strong>Registrar webhook Mercado Pago</strong><span>Painel MP → Webhooks → URL: <code>https://seu-dominio.com/api/webhooks/payment</code> → Eventos: <code>payment</code></span></div></li>
+    <li><div class="step-n">9</div><div class="step-body"><strong>Primeiro login de admin</strong><span>Acessar <code>/admin/onboarding</code> → Completar wizard 3 etapas → Worker de sourcing é disparado automaticamente</span></div></li>
+    <li><div class="step-n">10</div><div class="step-body"><strong>Monitoramento</strong><span>Verificar Sentry para erros · Supabase Logs para workers · Dashboard admin para produtos publicados</span></div></li>
+  </ol>
+
+  <h3>Comandos rápidos</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="c"># Instalar dependências</span>
+npm install
+
+<span class="c"># Gerar tipos TypeScript a partir do schema Supabase</span>
+npx supabase gen types typescript --project-id SEU_PROJECT_ID > types/supabase.ts
+
+<span class="c"># Rodar localmente</span>
+cp .env.example .env.local   <span class="c"># preencher variáveis</span>
+npx supabase start           <span class="c"># sobe Supabase local</span>
+npm run dev                  <span class="c"># sobe Next.js em localhost:3000</span>
+
+<span class="c"># Aplicar migrações em produção</span>
+npx supabase db push --project-ref SEU_PROJECT_ID
+
+<span class="c"># Build e deploy</span>
+vercel deploy --prod</code></pre>
+
+  <h3>Dependências npm</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="c"># Core</span>
+npm install @supabase/supabase-js @supabase/auth-helpers-nextjs
+npm install next react react-dom typescript @types/node @types/react
+
+<span class="c"># Validação e estado</span>
+npm install zod zustand
+
+<span class="c"># Pagamentos BR</span>
+npm install mercadopago
+
+<span class="c"># Rate limiting e cache</span>
+npm install @upstash/ratelimit @upstash/redis
+
+<span class="c"># Notificações</span>
+npm install resend twilio
+
+<span class="c"># Observabilidade</span>
+npm install @sentry/nextjs
+
+<span class="c"># Dev tools</span>
+npm install -D supabase tailwindcss postcss autoprefixer</code></pre>
+</div>
+
+<!-- ──────────────────────── ANTIGRAVITY ──────────────────────── -->
+<div class="section" id="antigravity">
+  <div class="section-header">
+    <span class="section-num">AG</span>
+    <div><h2>Antigravity — Rules, Workflows e Contexto</h2><p>Arquivos que o Antigravity lê para entender o projeto e executar tarefas.</p></div>
+  </div>
+
+  <div class="ag-block">
+    <div class="ag-title">Como usar com o Antigravity</div>
+    <p style="margin:0; color:var(--text2); font-size:14px;">Crie a pasta <code>.antigravity/</code> na raiz do projeto, adicione os arquivos abaixo e o arquivo <code>CONTEXT.md</code>. O Antigravity lê esses arquivos automaticamente antes de executar qualquer tarefa, garantindo que o agente siga as convenções e regras de negócio do sistema.</p>
+  </div>
+
+  <h3 class="file-label">.antigravity/rules.md</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="c"># Regras do Agente — Sistema de Dropshipping</span>
+
+<span class="c">## Stack e Convenções</span>
+- Framework: Next.js 14 com App Router e TypeScript estrito (strict: true)
+- Banco: Supabase (PostgreSQL). NUNCA usar ORM — apenas Supabase SDK com tipagem Database
+- Validação: Zod em TODOS os endpoints de API. Rejeitar input inválido com status 400
+- Estilo: Tailwind CSS. Componentes em components/store/ ou components/admin/
+- NENHUM secret pode aparecer em código client-side. Credenciais via API routes server-side
+
+<span class="c">## Segurança Obrigatória</span>
+- SUPABASE_SERVICE_ROLE_KEY: usar APENAS em arquivos server-side (route.ts, workers)
+- Webhooks: verificar assinatura HMAC ANTES de processar qualquer evento
+- Pagamentos: idempotência obrigatória via X-Idempotency-Key no Redis (TTL 24h)
+- CPF e dados pessoais: armazenar APENAS como hash SHA-256 (nunca plain text — LGPD)
+- RLS: cada query deve respeitar o isolamento por admin_id automaticamente
+
+<span class="c">## Workers e Automação</span>
+- Workers disparam via HTTP com Authorization: Bearer WORKER_SECRET_KEY
+- Todos os workers são fire-and-forget (não bloqueiam a request HTTP)
+- Erros de worker são logados na tabela 'logs' mas não quebram o fluxo principal
+- Nunca usar sleep() ou loops bloqueantes — usar cron ou eventos
+
+<span class="c">## Banco de Dados</span>
+- Sempre usar supabase.from('tabela') com tipagem Database['public']['Tables']
+- Queries públicas (loja): createServerComponentClient ou createRouteHandlerClient
+- Queries privilegiadas (workers, admin): createClient com SERVICE_ROLE_KEY
+- NUNCA usar SELECT * em produção — listar sempre os campos necessários
+- Índices GIN existem em 'categorias' e 'tags' — usar .contains() para buscas eficientes
+
+<span class="c">## Padrão de Resposta de APIs</span>
+- Sucesso: { data: T, success: true }
+- Erro:    { error: string, code?: string, details?: object }
+- HTTP: 200 sucesso, 201 criado, 400 inválido, 401 não autenticado,
+        403 proibido, 404 não encontrado, 429 rate limit, 500 servidor
+
+<span class="c">## Precificação</span>
+- Fórmula: preço = (custo_BRL * (1 + markup_frete%)) / (1 - margem%)
+- Usar SEMPRE a função calcularPreco() em lib/pricing.ts
+- Taxa de câmbio: buscar via AwesomeAPI, fallback 5.10 se API falhar
+- Arredondar para .90 ou .99 (preço psicológico)</code></pre>
+
+  <h3 class="file-label">.antigravity/workflows/new-module.md</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="c"># Workflow: Adicionar Novo Módulo</span>
+
+Quando o usuário pedir para adicionar um novo módulo ou funcionalidade:
+
+1. Criar pasta em workers/ (background job) ou app/api/ (endpoint HTTP)
+2. Criar interface/contrato em types/ se necessário
+3. Criar migration SQL numerada em supabase/migrations/
+4. Adicionar política RLS para a nova tabela criada
+5. Atualizar CONTEXT.md com a descrição do novo módulo
+6. Registrar o worker no pg_cron (003_cron_jobs.sql) se for job agendado
+7. Adicionar variáveis de ambiente necessárias no .env.example
+8. Criar testes unitários em __tests__/ para lógica de negócio crítica</code></pre>
+
+  <h3 class="file-label">.antigravity/workflows/add-supplier.md</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="c"># Workflow: Adicionar Novo Fornecedor</span>
+
+1. Criar workers/sourcing/suppliers/[nome-fornecedor].ts
+2. Implementar a interface ISupplierAdapter (workers/sourcing/suppliers/base.ts)
+3. Métodos obrigatórios: search(), getProduct(), getStock()
+4. Adicionar campo de credencial em configuracoes_gerais (nova migration SQL)
+5. Registrar adapter em workers/sourcing/index.ts no array de adapters
+6. Adicionar campo no formulário de onboarding (Etapa 3)
+7. Adicionar variável de ambiente no .env.example
+8. Testar com dados reais de sandbox do fornecedor antes de ativar em prod</code></pre>
+
+  <h3 class="file-label">CONTEXT.md (raiz do projeto)</h3>
+  <pre><button class="copy-btn" onclick="copyCode(this)">copiar</button><code><span class="c"># Contexto do Projeto — Sistema de Dropshipping Autônomo</span>
+
+<span class="c">## O que é este projeto</span>
+Sistema de dropshipping 100% autônomo em Next.js 14 + Supabase.
+Busca produtos automaticamente nos fornecedores (AliExpress, CJ Dropshipping),
+publica na loja, processa pagamentos BR (Pix/Cartão/Boleto) e realiza
+o fulfillment sem intervenção humana.
+
+<span class="c">## Módulos</span>
+- M1: Onboarding    → hooks/useOnboarding.ts + /api/admin/onboarding/complete
+- M2: Sourcing      → workers/sourcing/index.ts (pg_cron, cada 6h)
+- M3: Loja          → app/(store)/
+- M4: Pagamentos    → lib/payment/ + /api/webhooks/payment (HMAC)
+- M5: Fulfillment   → workers/fulfillment/
+- M6: Database      → supabase/migrations/
+- M7: Gateway       → middleware.ts + lib/gateway-router.ts
+
+<span class="c">## Regras de negócio críticas</span>
+- Preço = custo_BRL * (1 + markup_frete%) / (1 - margem%)
+- Pagamento só dispara fulfillment após verificação HMAC do webhook
+- Idempotência: chave única por evento de pagamento no Redis (TTL 24h)
+- RLS: cada admin vê APENAS seus próprios dados (isolamento por admin_id)
+- Workers: fire-and-forget, erros logados mas não quebram o fluxo HTTP
+
+<span class="c">## Fornecedores ativos</span>
+- AliExpress Affiliate API (HMAC-MD5, endpoint: api-sg.aliexpress.com)
+- CJ Dropshipping API v2.0 (JWT Bearer, endpoint: developers.cjdropshipping.com)
+
+<span class="c">## Fluxo de pagamento completo</span>
+1. Cliente finaliza checkout → POST /api/checkout/session (cria sessão Redis)
+2. Frontend cria pagamento via SDK MP (tokeniza cartão client-side)
+3. POST /api/checkout/confirm → cria pedido no banco + chama MP API
+4. MP dispara webhook → POST /api/webhooks/payment (verifica HMAC)
+5. Webhook aprova → atualiza pedido → dispara worker de fulfillment
+6. Worker compra no fornecedor → captura rastreio → notifica cliente</code></pre>
+</div>
+
+<!-- ──────────────────────── LGPD ──────────────────────────────── -->
+<div class="section" id="lgpd">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <div><h2>LGPD e Segurança</h2><p>Conformidade com a Lei 13.709/2018 · Checklist de implementação.</p></div>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-icon">⚖️</div>
+    <div class="callout-body"><strong>Obrigatório para operação no Brasil</strong>A LGPD exige medidas técnicas de proteção de dados pessoais. Multas de até R$ 50 milhões por infração. Os itens marcados como pendentes precisam ser completados antes do lançamento.</div>
+  </div>
+
+  <ul class="checklist">
+    <li><div class="chk">✓</div><div>CPF nunca armazenado em plain text — campo <code>cpf_hash</code> usa SHA-256 na tabela <code>clientes</code></div></li>
+    <li><div class="chk">✓</div><div>Consentimento de marketing — campo <code>aceita_marketing</code> com data de aceite <code>lgpd_aceito_em</code></div></li>
+    <li><div class="chk">✓</div><div>Direito ao esquecimento — DELETE cascata em <code>auth.users</code> remove todos os dados do cliente</div></li>
+    <li><div class="chk">✓</div><div>Minimização de dados — apenas campos necessários coletados e armazenados</div></li>
+    <li><div class="chk">✓</div><div>Isolamento de dados — RLS garante que cada admin acessa APENAS seus dados</div></li>
+    <li><div class="chk">✓</div><div>Credenciais criptografadas — <code>SERVICE_ROLE_KEY</code> nunca exposta no frontend</div></li>
+    <li><div class="chk">✓</div><div>HTTPS obrigatório — Vercel e Railway forçam HTTPS em todos os ambientes</div></li>
+    <li><div class="chk">✓</div><div>Logs de acesso — tabela <code>logs</code> registra todas as ações com timestamp e IP</div></li>
+    <li><div class="chk warn">!</div><div><strong>Configurar Sentry</strong> — adicionar DSN nas variáveis de ambiente para alertas de incidentes</div></li>
+    <li><div class="chk danger">✗</div><div><strong>Política de Privacidade</strong> — exibir na loja antes do checkout. Elaborar com advogado especializado</div></li>
+    <li><div class="chk danger">✗</div><div><strong>DPO (Encarregado de Dados)</strong> — nomear responsável pela gestão de dados pessoais e registrar na ANPD</div></li>
+    <li><div class="chk danger">✗</div><div><strong>Termos de Uso</strong> — elaborar documento com direitos e deveres do consumidor (CDC + LGPD)</div></li>
+  </ul>
+
+  <div class="divider"></div>
+  <p style="text-align:center; color:var(--text3); font-family:var(--font-mono); font-size:12px;">
+    Sistema de Dropshipping Autônomo · Documentação Técnica v1.0<br>
+    Construído para Google Antigravity · Next.js 14 · Supabase · TypeScript
+  </p>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<script>
+// ── Copy button ────────────────────────────────────────────────────
+function copyCode(btn) {
+  const code = btn.nextElementSibling.innerText
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = 'copiado!'
+    btn.classList.add('copied')
+    setTimeout(() => { btn.textContent = 'copiar'; btn.classList.remove('copied') }, 2000)
+  })
+}
+
+// ── Active nav on scroll ───────────────────────────────────────────
+const sections = document.querySelectorAll('.section[id], header[id]')
+const navItems = document.querySelectorAll('.nav-item')
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'))
+      const active = document.querySelector(`.nav-item[href="#${e.target.id}"]`)
+      if (active) active.classList.add('active')
+    }
+  })
+}, { rootMargin: '-10% 0px -80% 0px' })
+
+sections.forEach(s => observer.observe(s))
+
+// ── Smooth scroll offset for fixed sidebar ─────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault()
+    const target = document.querySelector(a.getAttribute('href'))
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (window.innerWidth <= 1024)
+      document.getElementById('sidebar').classList.remove('open')
+  })
+})
+</script>
+</body>
+</html>
